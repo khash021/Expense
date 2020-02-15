@@ -1,4 +1,4 @@
-package tech.khash.realmtest.util;
+package tech.khash.expense.util;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tech.khash.realmtest.R;
-import tech.khash.realmtest.adapter.ExpenseTypeAdapter;
-import tech.khash.realmtest.model.ExpenseEntity;
+import tech.khash.expense.R;
+import tech.khash.expense.adapter.ExpenseTypeAdapter;
+import tech.khash.expense.model.ExpenseEntity;
 
 public class DialogUtil {
 

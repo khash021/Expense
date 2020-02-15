@@ -1,4 +1,4 @@
-package tech.khash.realmtest;
+package tech.khash.expense;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +15,15 @@ import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import io.realm.Realm;
-import tech.khash.realmtest.base.BaseApp;
-import tech.khash.realmtest.model.Constants;
-import tech.khash.realmtest.model.ExpenseEntity;
-import tech.khash.realmtest.util.CalculateUtil;
-import tech.khash.realmtest.util.CommonUtil;
-import tech.khash.realmtest.util.DateTimeUtil;
-import tech.khash.realmtest.util.DialogUtil;
-import tech.khash.realmtest.util.RealmUtil;
-import tech.khash.realmtest.util.ViewUtil;
+import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.model.Constants;
+import tech.khash.expense.model.ExpenseEntity;
+import tech.khash.expense.util.CalculateUtil;
+import tech.khash.expense.util.CommonUtil;
+import tech.khash.expense.util.DateTimeUtil;
+import tech.khash.expense.util.DialogUtil;
+import tech.khash.expense.util.RealmUtil;
+import tech.khash.expense.util.ViewUtil;
 
 public class MainActivity extends BaseApp implements View.OnClickListener,
         SpeedDialView.OnActionSelectedListener, DialogUtil.ShowDeleteConfirmationDialog.DeleteDialogListener {
@@ -66,7 +66,6 @@ public class MainActivity extends BaseApp implements View.OnClickListener,
                 new SpeedDialActionItem.Builder(R.id.fab_create_other, R.drawable.ic_other_white)
                         .setFabBackgroundColor(ContextCompat.getColor(this, R.color.colorAccentQuinary))
                         .setLabel(getString(R.string.expense_type_other))
-                        .setFabImageTintColor(R.color.black)
                         .setLabelClickable(true).create());
 
         fab.addActionItem(

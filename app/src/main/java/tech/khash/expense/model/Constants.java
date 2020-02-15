@@ -1,4 +1,4 @@
-package tech.khash.realmtest.model;
+package tech.khash.expense.model;
 
 public class Constants {
 

@@ -1,11 +1,11 @@
-package tech.khash.realmtest.util;
+package tech.khash.expense.util;
 
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.RealmMigration;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
-import tech.khash.realmtest.model.ExpenseEntity;
+import tech.khash.expense.model.ExpenseEntity;
 
 public class RealmExpenseMigration implements RealmMigration {
     @Override

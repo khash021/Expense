@@ -1,4 +1,4 @@
-package tech.khash.realmtest.model;
+package tech.khash.expense.model;
 
 import android.text.TextUtils;
 
@@ -11,7 +11,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import tech.khash.realmtest.util.CommonUtil;
+import tech.khash.expense.util.CommonUtil;
 
 public class ExpenseEntity extends RealmObject {
 

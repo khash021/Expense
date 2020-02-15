@@ -1,4 +1,4 @@
-package tech.khash.realmtest.util;
+package tech.khash.expense.util;
 
 import androidx.annotation.NonNull;
 
@@ -15,8 +15,8 @@ import io.realm.RealmObjectSchema;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.RealmSchema;
-import tech.khash.realmtest.model.Constants;
-import tech.khash.realmtest.model.ExpenseEntity;
+import tech.khash.expense.model.Constants;
+import tech.khash.expense.model.ExpenseEntity;
 
 public class RealmUtil {
 

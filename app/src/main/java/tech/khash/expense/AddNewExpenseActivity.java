@@ -1,4 +1,4 @@
-package tech.khash.realmtest;
+package tech.khash.expense;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,12 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
 import io.realm.Realm;
-import tech.khash.realmtest.base.BaseApp;
-import tech.khash.realmtest.model.Constants;
-import tech.khash.realmtest.model.ExpenseEntity;
-import tech.khash.realmtest.util.CommonUtil;
-import tech.khash.realmtest.util.DialogUtil;
-import tech.khash.realmtest.util.RealmUtil;
+import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.model.Constants;
+import tech.khash.expense.model.ExpenseEntity;
+import tech.khash.expense.util.CommonUtil;
+import tech.khash.expense.util.DialogUtil;
+import tech.khash.expense.util.RealmUtil;
 
 public class AddNewExpenseActivity extends BaseApp implements View.OnClickListener,
         AdapterView.OnItemSelectedListener, DialogUtil.ExpenseTypeDialog.ExpenseTypeDialogListener {

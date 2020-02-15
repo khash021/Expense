@@ -1,10 +1,10 @@
-package tech.khash.realmtest.util;
+package tech.khash.expense.util;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import tech.khash.realmtest.model.ExpenseEntity;
+import tech.khash.expense.model.ExpenseEntity;
 
 public class CalculateUtil {
 

@@ -1,4 +1,4 @@
-package tech.khash.realmtest;
+package tech.khash.expense;
 
 import android.os.Bundle;
 
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import tech.khash.realmtest.adapter.ExpenseEntityRecyclerAdapter;
-import tech.khash.realmtest.base.BaseApp;
-import tech.khash.realmtest.model.ExpenseEntity;
+import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
+import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.model.ExpenseEntity;
 
 public class ExpenseListActivity extends BaseApp {
 

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.khash.realmtest">
+    package="tech.khash.expense">
 
     <application
-        android:name=".RealmTestApplication"
+        android:name="tech.khash.expense.RealmTestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExpenseListActivity"
+        <activity android:name="tech.khash.expense.ExpenseListActivity"
             android:label="@string/expense_list"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName="tech.khash.expense.MainActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name="tech.khash.expense.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,9 +25,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddNewExpenseActivity"
+            android:name="tech.khash.expense.AddNewExpenseActivity"
             android:label="@string/add_new_expense"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="tech.khash.expense.MainActivity" />
     </application>
 
 </manifest>

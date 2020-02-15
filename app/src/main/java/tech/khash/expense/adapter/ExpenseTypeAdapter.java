@@ -1,4 +1,4 @@
-package tech.khash.realmtest.adapter;
+package tech.khash.expense.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tech.khash.realmtest.R;
-import tech.khash.realmtest.model.Constants;
+import tech.khash.expense.R;
+import tech.khash.expense.model.Constants;
 
 public class ExpenseTypeAdapter extends RecyclerView.Adapter<ExpenseTypeAdapter.ExpenseTypeViewHolder> {
     private final String[] expenses = new String[7];

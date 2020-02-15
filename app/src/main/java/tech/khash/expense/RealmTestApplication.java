@@ -1,9 +1,9 @@
-package tech.khash.realmtest;
+package tech.khash.expense;
 
 import android.app.Application;
 
 import io.realm.Realm;
-import tech.khash.realmtest.util.RealmUtil;
+import tech.khash.expense.util.RealmUtil;
 
 public class RealmTestApplication extends Application {
 
