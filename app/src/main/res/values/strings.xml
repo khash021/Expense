@@ -1,0 +1,54 @@
+<resources>
+    <!--Title-->
+    <string name="app_name">Expense </string>
+    <string name="action_settings">Settings</string>
+    <string name="add_new_expense">Add New Expense</string>
+    <string name="add_new_expense_food">Add Food</string>
+    <string name="add_new_expense_alcohol">Add Alcohol</string>
+    <string name="add_new_expense_weed">Add Weed</string>
+    <string name="add_new_expense_gas">Add Gas</string>
+    <string name="add_new_expense_accommodation">Add Accommodation</string>
+    <string name="add_new_expense_gear">Add Gear</string>
+    <string name="add_new_expense_other">Add Other</string>
+    <string name="expense_list">Expense List</string>
+
+    <!--Expense Activity-->
+    <string name="expense_type_select">Select type</string>
+    <string name="expense_type_food">Food</string>
+    <string name="expense_type_gear">Gear</string>
+    <string name="expense_type_alcohol">Alcohol</string>
+    <string name="expense_type_weed">Weed</string>
+    <string name="expense_type_gas">Gas</string>
+    <string name="expense_type_accommodation">Accommodation</string>
+    <string name="expense_type_other">Other</string>
+    <string name="amount_asterik">Amount *</string>
+    <string name="expense_type_asterik">Expense Type *</string>
+    <string name="comment_opt">Comment (opt)</string>
+
+    <string name="comments_hint">Enter comments here</string>
+    <string name="submit">Submit</string>
+
+    <!--Dialod and Toasts-->
+    <string name="please_complete_all_fields">Please complete all required fields</string>
+    <string name="submitted_successfully">Submitted successfully</string>
+    <string name="submitted_failure">An unexpected occurred\nPlease try again</string>
+    <string name="delete_all">Delete All</string>
+    <string name="delete_all_success_message">Database deleted successfully</string>
+    <string name="warning">Warning</string>
+    <string name="delete_all_message">Are you sure you want to delete the entire database?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+
+    <!--Other-->
+    <string name="type">Type</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="comments">Comments</string>
+    <string name="list">List</string>
+    <string name="total">Total</string>
+    <string name="monday">Monday</string>
+    <string name="switch_expense_type">Switch Expense Type</string>
+
+</resources>

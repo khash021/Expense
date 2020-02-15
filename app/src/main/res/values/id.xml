@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="fab_create_food"/>
+    <item type="id" name="fab_create_alcohol"/>
+    <item type="id" name="fab_create_weed"/>
+    <item type="id" name="fab_create_gas"/>
+    <item type="id" name="fab_create_accommodation"/>
+    <item type="id" name="fab_create_other"/>
+    <item type="id" name="fab_create_gear"/>
+</resources>
