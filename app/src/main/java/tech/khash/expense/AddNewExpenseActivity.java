@@ -7,11 +7,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -25,12 +23,11 @@ import tech.khash.expense.util.DialogUtil;
 import tech.khash.expense.util.RealmUtil;
 
 public class AddNewExpenseActivity extends BaseApp implements View.OnClickListener,
-        AdapterView.OnItemSelectedListener, DialogUtil.ExpenseTypeDialog.ExpenseTypeDialogListener {
+        DialogUtil.ExpenseTypeDialog.ExpenseTypeDialogListener {
 
     private Button buttonSubmit;
     private EditText editAmount, editComment;
-    private LinearLayout typeContainer;
-    private Spinner spinner;
+    private ImageView imageExpenseType;
     private int currentType = -1;
     private ActionBar actionBar;
 
@@ -55,16 +52,13 @@ public class AddNewExpenseActivity extends BaseApp implements View.OnClickListen
     }
 
     private void initializeViews() {
-        typeContainer = findViewById(R.id.container_type);
+        imageExpenseType = findViewById(R.id.image_expense_type);
 
         buttonSubmit = findViewById(R.id.button_submit);
         buttonSubmit.setOnClickListener(this);
 
         editAmount = findViewById(R.id.edit_amount);
         editComment = findViewById(R.id.edit_comment);
-
-        spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(this);
 
         View.OnKeyListener keyListener = new View.OnKeyListener() {
             @Override
@@ -99,47 +93,52 @@ public class AddNewExpenseActivity extends BaseApp implements View.OnClickListen
     }
 
     private void setupPage(int currentType) {
-        if (typeContainer != null)
-            typeContainer.setVisibility(View.GONE);
+        imageExpenseType.setVisibility(View.VISIBLE);
         switch (currentType) {
             case ExpenseEntity.FOOD:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_food);
+                imageExpenseType.setImageResource(R.drawable.food_header);
                 //TODO:
                 return;
             case ExpenseEntity.ALCOHOL:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_alcohol);
+                imageExpenseType.setImageResource(R.drawable.alcohol_header);
                 //TODO:
                 return;
             case ExpenseEntity.WEED:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_weed);
+                imageExpenseType.setImageResource(R.drawable.weed_header);
                 //TODO:
                 return;
             case ExpenseEntity.GAS:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_gas);
+                imageExpenseType.setImageResource(R.drawable.gas_header);
                 //TODO:
                 return;
             case ExpenseEntity.ACCOMMODATION:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_accommodation);
+                imageExpenseType.setImageResource(R.drawable.accomm_header);
                 //TODO:
                 return;
             case ExpenseEntity.GEAR:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_gear);
+                imageExpenseType.setImageResource(R.drawable.gear_header);
                 //TODO:
                 return;
             case ExpenseEntity.OTHER:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_other);
+                imageExpenseType.setImageResource(R.drawable.other_header);
                 //TODO:
                 return;
             default:
-                if (typeContainer != null)
-                    typeContainer.setVisibility(View.VISIBLE);
+                imageExpenseType.setVisibility(View.GONE);
                 return;
         }
     }
@@ -283,37 +282,6 @@ public class AddNewExpenseActivity extends BaseApp implements View.OnClickListen
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position) {
-            case 0:
-            default:
-                currentType = -1;
-                break;
-            case 1:
-                currentType = ExpenseEntity.FOOD;
-                break;
-            case 2:
-                currentType = ExpenseEntity.ALCOHOL;
-                break;
-            case 3:
-                currentType = ExpenseEntity.WEED;
-                break;
-            case 4:
-                currentType = ExpenseEntity.GAS;
-                break;
-            case 5:
-                currentType = ExpenseEntity.ACCOMMODATION;
-                break;
-            case 6:
-                currentType = ExpenseEntity.OTHER;
-                break;
-            case 7:
-                currentType = ExpenseEntity.GEAR;
-                break;
-        }
-    }
-
-    @Override
     public void onExpenseSelected(int expenseType) {
         switch (expenseType) {
             case 0:
@@ -343,10 +311,6 @@ public class AddNewExpenseActivity extends BaseApp implements View.OnClickListen
                 break;
         }
         setupPage(currentType);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     @Override
