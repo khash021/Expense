@@ -8,64 +8,212 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <LinearLayout
+        android:id="@+id/container_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_title_date">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_food" />
+
+        <TextView
+            android:id="@+id/text_food"
+            style="@style/text_summary_main_values"
+            tools:text="135" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_alcohol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_food">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_alcohol" />
+
+        <TextView
+            android:id="@+id/text_alcohol"
+            style="@style/text_summary_main_values"
+            tools:text="12" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_weed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_alcohol">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_weed" />
+
+        <TextView
+            android:id="@+id/text_weed"
+            style="@style/text_summary_main_values"
+            tools:text="60" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_gas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_weed">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_gas" />
+
+        <TextView
+            android:id="@+id/text_gas"
+            style="@style/text_summary_main_values"
+            tools:text="80" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_accommodation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_gas">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_accommodation" />
+
+        <TextView
+            android:id="@+id/text_accommodation"
+            style="@style/text_summary_main_values"
+            tools:text="10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_accommodation">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_other" />
+
+        <TextView
+            android:id="@+id/text_other"
+            style="@style/text_summary_main_values"
+            tools:text="10" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_gear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_other">
+
+        <TextView
+            style="@style/text_summary_main_title"
+            android:text="@string/expense_type_gear" />
+
+        <TextView
+            android:id="@+id/text_gear"
+            style="@style/text_summary_main_values"
+            tools:text="120" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_gear">
+
+        <!--        <TextView-->
+        <!--            android:text="@string/total"-->
+        <!--            style="@style/text_summary_main_title" />-->
+
+        <TextView
+            android:id="@+id/text_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:text="120" />
+
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/text_week_title"
+        android:id="@+id/text_title_date"
         style="@style/text_view_general"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/text_week"
-        android:layout_marginTop="50dp"
-        android:text="@string/monday"/>
-
-    <TextView
-        android:id="@+id/text_week"
-        style="@style/text_view_general"
-        android:textSize="18sp"
-        tools:text="5"
-        android:textStyle="bold"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@id/text_week_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_week_title"/>
-
-    <TextView
-        android:id="@+id/text_monday_title"
-        style="@style/text_view_general"
-        app:layout_constraintTop_toBottomOf="@id/text_week_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/text_monday"
-        android:layout_marginTop="12dp"
-        android:text="@string/monday"/>
-
-    <TextView
-        android:id="@+id/text_monday"
-        style="@style/text_view_general"
-        android:textSize="18sp"
-        tools:text="Monday, Jan.20.2020"
-        app:layout_constraintStart_toEndOf="@id/text_monday_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_monday_title"/>
-
-    <TextView
-        android:id="@+id/text_total_title"
-        style="@style/text_view_general"
-        app:layout_constraintTop_toBottomOf="@id/text_monday_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"
-        android:text="@string/total"/>
-
-    <TextView
-        android:id="@+id/text_total"
-        style="@style/text_view_general"
-        android:textSize="18sp"
-        tools:text="120"
-        android:textStyle="bold"
-        android:layout_marginTop="12dp"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_total_title"/>
+        tools:text="Week 5: Monday, Feb.12.2020" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BaseApp extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {

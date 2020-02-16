@@ -14,10 +14,10 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
-import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.ExpenseEntity;
 
-public class ExpenseListActivity extends BaseApp {
+public class ExpenseListActivity extends BaseActivity {
 
     private ArrayList<ExpenseEntity> expenseEntities;
 

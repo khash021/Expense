@@ -2,20 +2,23 @@ package tech.khash.expense;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import io.realm.Realm;
-import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.CalculateUtil;
@@ -25,11 +28,14 @@ import tech.khash.expense.util.DialogUtil;
 import tech.khash.expense.util.RealmUtil;
 import tech.khash.expense.util.ViewUtil;
 
-public class MainActivity extends BaseApp implements View.OnClickListener,
+public class MainActivity extends BaseActivity implements View.OnClickListener,
         SpeedDialView.OnActionSelectedListener, DialogUtil.ShowDeleteConfirmationDialog.DeleteDialogListener {
 
     private SpeedDialView fab;
-    private TextView mondayText, weekText, totalText;
+    private TextView weekTitleText,foodText, alcoholText, weedText, gasText, accommText, gearText,
+            otherText, totalText;
+    private LinearLayout foodContainer, alcoholContainer, weedContainer, gasContainer,
+            accommContainer, gearContainer, otherContainer;
     private View overlayView;
 
     @Override
@@ -41,7 +47,6 @@ public class MainActivity extends BaseApp implements View.OnClickListener,
 
         initViews();
         setupFab();
-        initData();
         updateView();
     }
 
@@ -54,9 +59,25 @@ public class MainActivity extends BaseApp implements View.OnClickListener,
     private void initViews() {
         fab = findViewById(R.id.fab);
         overlayView = findViewById(R.id.fab_overlay);
-        mondayText = findViewById(R.id.text_monday);
-        weekText = findViewById(R.id.text_week);
+
+        weekTitleText = findViewById(R.id.text_title_date);
+        foodText = findViewById(R.id.text_food);
+        alcoholText = findViewById(R.id.text_alcohol);
+        weedText = findViewById(R.id.text_weed);
+        gasText = findViewById(R.id.text_gas);
+        accommText = findViewById(R.id.text_accommodation);
+        gearText = findViewById(R.id.text_gear);
+        otherText = findViewById(R.id.text_other);
         totalText = findViewById(R.id.text_total);
+
+
+        foodContainer = findViewById(R.id.container_food);
+        alcoholContainer = findViewById(R.id.container_alcohol);
+        weedContainer = findViewById(R.id.container_weed);
+        gasContainer = findViewById(R.id.container_gas);
+        accommContainer = findViewById(R.id.container_accommodation);
+        gearContainer = findViewById(R.id.container_gear);
+        otherContainer = findViewById(R.id.container_other);
     }
 
     private void setupFab() {
@@ -124,12 +145,58 @@ public class MainActivity extends BaseApp implements View.OnClickListener,
         });
     }
 
-    private void initData() {
+    private void updateView() {
         int thisWeek = DateTimeUtil.getWeekOfTheYear();
         String mondayStr = DateTimeUtil.getMondayDateTimeStr();
 
-        weekText.setText(String.valueOf(thisWeek));
-        mondayText.setText(mondayStr);
+        String title = getString(R.string.main_report_title_date, thisWeek, mondayStr);
+        Spanned styledTitle = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY);
+        weekTitleText.setText(styledTitle);
+
+        int food = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.FOOD);
+        if (food > 0) {
+            foodContainer.setVisibility(View.VISIBLE);
+            foodText.setText(String.valueOf(food));
+        }
+
+        int alcohol = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.ALCOHOL);
+        if (alcohol > 0) {
+            alcoholContainer.setVisibility(View.VISIBLE);
+            alcoholText.setText(String.valueOf(alcohol));
+        }
+
+        int weed = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.WEED);
+        if (weed > 0) {
+            weedContainer.setVisibility(View.VISIBLE);
+            weedText.setText(String.valueOf(weed));
+        }
+
+        int gas = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.GAS);
+        if (gas > 0) {
+            gasContainer.setVisibility(View.VISIBLE);
+            gasText.setText(String.valueOf(gas));
+        }
+
+        int accommodation = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.ACCOMMODATION);
+        if (accommodation > 0) {
+            accommContainer.setVisibility(View.VISIBLE);
+            accommText.setText(String.valueOf(accommodation));
+        }
+
+        int other = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.OTHER);
+        if (other > 0) {
+            otherContainer.setVisibility(View.VISIBLE);
+            otherText.setText(String.valueOf(other));
+        }
+
+        int gear = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.GEAR);
+        if (gear > 0) {
+            gearContainer.setVisibility(View.VISIBLE);
+            gearText.setText(String.valueOf(gear));
+        }
+
+        int total = CalculateUtil.getThisWeekTotal();
+        totalText.setText(String.valueOf(total));
     }
 
     private void showFab() {
@@ -145,12 +212,6 @@ public class MainActivity extends BaseApp implements View.OnClickListener,
     private void closeFab() {
         if (fab != null && fab.isOpen())
             fab.close();
-    }
-
-    private void updateView() {
-        int total = CalculateUtil.getThisWeekTotal();
-        if (total != -1)
-            totalText.setText(String.valueOf(total));
     }
 
     @Override

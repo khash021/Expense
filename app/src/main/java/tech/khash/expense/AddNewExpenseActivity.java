@@ -15,14 +15,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
 import io.realm.Realm;
-import tech.khash.expense.base.BaseApp;
+import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DialogUtil;
 import tech.khash.expense.util.RealmUtil;
 
-public class AddNewExpenseActivity extends BaseApp implements View.OnClickListener,
+public class AddNewExpenseActivity extends BaseActivity implements View.OnClickListener,
         DialogUtil.ExpenseTypeDialog.ExpenseTypeDialogListener {
 
     private Button buttonSubmit;

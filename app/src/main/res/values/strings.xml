@@ -13,7 +13,6 @@
     <string name="expense_list">Expense List</string>
 
     <!--Expense Activity-->
-    <string name="expense_type_select">Select type</string>
     <string name="expense_type_food">Food</string>
     <string name="expense_type_gear">Gear</string>
     <string name="expense_type_alcohol">Alcohol</string>
@@ -22,7 +21,6 @@
     <string name="expense_type_accommodation">Accommodation</string>
     <string name="expense_type_other">Other</string>
     <string name="amount_asterik">Amount *</string>
-    <string name="expense_type_asterik">Expense Type *</string>
     <string name="comment_opt">Comment (opt)</string>
 
     <string name="comments_hint">Enter comments here</string>
@@ -49,6 +47,9 @@
     <string name="list">List</string>
     <string name="total">Total</string>
     <string name="monday">Monday</string>
+    <!--Since we are formatting the text, we can't directly use html tags, instead we need to
+         escape using &lt; instead of the opening brackets-->
+    <string name="main_report_title_date">Week &lt;big>&lt;b>%1d&lt;/b>&lt;/big> : %2s</string>
     <string name="switch_expense_type">Switch Expense Type</string>
 
 </resources>
