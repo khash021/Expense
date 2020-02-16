@@ -3,6 +3,7 @@ package tech.khash.expense;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,6 +65,34 @@ public class AddNewExpenseActivity extends BaseApp implements View.OnClickListen
 
         spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
+
+        View.OnKeyListener keyListener = new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    hideSoftKeyboard();
+                    ((EditText) v).setCursorVisible(false);
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    ((EditText) v).setCursorVisible(true);
+                else
+                    ((EditText) v).setCursorVisible(false);
+            }
+        };
+
+        editAmount.setOnKeyListener(keyListener);
+        editAmount.setOnFocusChangeListener(focusChangeListener);
+
+        editComment.setOnKeyListener(keyListener);
+        editComment.setOnFocusChangeListener(focusChangeListener);
 
         editAmount.requestFocus();
         showSoftKeyboard();

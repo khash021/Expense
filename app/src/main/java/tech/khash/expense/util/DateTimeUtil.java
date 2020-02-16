@@ -1,5 +1,7 @@
 package tech.khash.expense.util;
 
+import androidx.annotation.NonNull;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.format.DateTimeFormat;
@@ -33,5 +35,27 @@ public class DateTimeUtil {
     public static int getThisYearInt() {
         DateTime todayDateTime = new DateTime();
         return todayDateTime.withDayOfWeek(DateTimeConstants.MONDAY).getYear();
+    }
+
+    public static long getEpochBeginningOfToday() {
+        DateTime now = new DateTime();
+        DateTime todayStart = now.withTimeAtStartOfDay();
+        return todayStart.getMillis();
+    }
+
+    public static long getEpochEndOfToday() {
+        DateTime now = new DateTime();
+        DateTime tomorrowStart = now.plusDays(1).withTimeAtStartOfDay();
+        return tomorrowStart.getMillis();
+    }
+
+    public static long getStartDayEpochFromDateTime(@NonNull DateTime dateTime) {
+        DateTime start = dateTime.withTimeAtStartOfDay();
+        return start.getMillis();
+    }
+
+    public static long getEndDayEpochEndFromDateTime(@NonNull DateTime dateTime) {
+        DateTime end = dateTime.plusDays(1).withTimeAtStartOfDay();
+        return end.getMillis();
     }
 }
