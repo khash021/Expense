@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -30,6 +31,9 @@ public class ExpenseListActivity extends BaseApp {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         getExpenseEntities();
+
+        //reverse list so the newest is at top
+        Collections.reverse(expenseEntities);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         ExpenseEntityRecyclerAdapter adapter = new ExpenseEntityRecyclerAdapter(this,
