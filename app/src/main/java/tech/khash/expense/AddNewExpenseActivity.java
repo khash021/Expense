@@ -99,43 +99,36 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_food);
                 imageExpenseType.setImageResource(R.drawable.food_header);
-                //TODO:
                 return;
             case ExpenseEntity.ALCOHOL:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_alcohol);
                 imageExpenseType.setImageResource(R.drawable.alcohol_header);
-                //TODO:
                 return;
             case ExpenseEntity.WEED:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_weed);
                 imageExpenseType.setImageResource(R.drawable.weed_header);
-                //TODO:
                 return;
             case ExpenseEntity.GAS:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_gas);
                 imageExpenseType.setImageResource(R.drawable.gas_header);
-                //TODO:
                 return;
             case ExpenseEntity.ACCOMMODATION:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_accommodation);
                 imageExpenseType.setImageResource(R.drawable.accomm_header);
-                //TODO:
                 return;
             case ExpenseEntity.GEAR:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_gear);
                 imageExpenseType.setImageResource(R.drawable.gear_header);
-                //TODO:
                 return;
             case ExpenseEntity.OTHER:
                 if (actionBar != null)
                     actionBar.setTitle(R.string.add_new_expense_other);
                 imageExpenseType.setImageResource(R.drawable.other_header);
-                //TODO:
                 return;
             default:
                 imageExpenseType.setVisibility(View.GONE);
@@ -310,6 +303,8 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
                 currentType = ExpenseEntity.GEAR;
                 break;
         }
+        editAmount.requestFocus();
+        showSoftKeyboard();
         setupPage(currentType);
     }
 

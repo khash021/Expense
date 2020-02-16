@@ -1,6 +1,7 @@
 package tech.khash.expense.base;
 
 import android.content.Context;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
@@ -20,6 +21,12 @@ public class BaseActivity extends AppCompatActivity {
             hideSoftKeyboard();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        hideSoftKeyboard();
+        return super.onMenuOpened(featureId, menu);
     }
 
     protected void showSoftKeyboard() {
