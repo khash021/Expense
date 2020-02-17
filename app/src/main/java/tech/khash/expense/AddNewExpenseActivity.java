@@ -198,7 +198,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         String comment = editComment.getText().toString().trim();
         int expenseType = getExpenseType(currentType);
         if (amount == 0 || currentType == -1) {
-            CommonUtil.showToastShort(this, getResources().getString(R.string.please_complete_all_fields));
+            CommonUtil.showToastShort(this, getString(R.string.please_complete_all_fields));
             return;
         }
 
@@ -207,7 +207,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onSuccess() {
                 CommonUtil.showToastShort(AddNewExpenseActivity.this,
-                        getResources().getString(R.string.submitted_successfully));
+                        getString(R.string.submitted_successfully));
                 setResult(RESULT_OK);
                 hideSoftKeyboard();
                 finish();
@@ -216,7 +216,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onError(Throwable error) {
                 CommonUtil.showToastShort(AddNewExpenseActivity.this,
-                        getResources().getString(R.string.submitted_failure));
+                        getString(R.string.submitted_failure));
             }
         });
     }

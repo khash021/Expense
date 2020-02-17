@@ -1,9 +1,11 @@
 package tech.khash.expense.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
 
     public interface ListClickListener {
         void onExpenseListClick(int position);
+
         void onExpenseListLongClick(int position);
     }
 
@@ -47,11 +50,39 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
         ExpenseEntity expenseEntity = expenses.get(position);
 
         holder.amountText.setText(String.valueOf(expenseEntity.getAmount()));
-        holder.typeText.setText(expenseEntity.getExpenseTypeStr());
         holder.dateText.setText(expenseEntity.getTodayDateTimeStr());
-        holder.monthText.setText(String.valueOf(expenseEntity.getMonthOfTheYear()));
         holder.weekText.setText(String.valueOf(expenseEntity.getWeekOfTheYear()));
-        holder.commentText.setText(expenseEntity.getComment());
+        String comment = expenseEntity.getComment();
+        if (!TextUtils.isEmpty(comment)) {
+            holder.commentText.setVisibility(View.VISIBLE);
+            holder.commentText.setText(expenseEntity.getComment());
+        }
+
+        switch (expenseEntity.getType()) {
+            case ExpenseEntity.FOOD:
+                holder.imageView.setImageResource(R.drawable.food_header);
+                return;
+            case ExpenseEntity.ALCOHOL:
+                holder.imageView.setImageResource(R.drawable.alcohol_header);
+                return;
+            case ExpenseEntity.WEED:
+                holder.imageView.setImageResource(R.drawable.weed_header);
+                return;
+            case ExpenseEntity.GAS:
+                holder.imageView.setImageResource(R.drawable.gas_header);
+                return;
+            case ExpenseEntity.ACCOMMODATION:
+                holder.imageView.setImageResource(R.drawable.accomm_header);
+                return;
+            case ExpenseEntity.GEAR:
+                holder.imageView.setImageResource(R.drawable.gear_header);
+                return;
+            case ExpenseEntity.OTHER:
+                holder.imageView.setImageResource(R.drawable.other_header);
+                return;
+            default:
+                return;
+        }
     }
 
     @Override
@@ -65,15 +96,15 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
     class ExpenseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
 
-        final TextView typeText, amountText, weekText, monthText, dateText, commentText;
+        final TextView amountText, weekText, dateText, commentText;
+        final ImageView imageView;
 
         public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            typeText = itemView.findViewById(R.id.text_type);
+            imageView = itemView.findViewById(R.id.image);
             amountText = itemView.findViewById(R.id.text_amount);
             weekText = itemView.findViewById(R.id.text_week);
-            monthText = itemView.findViewById(R.id.text_month);
             dateText = itemView.findViewById(R.id.text_date);
             commentText = itemView.findViewById(R.id.text_comment);
 

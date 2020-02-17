@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -37,6 +38,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private LinearLayout foodContainer, alcoholContainer, weedContainer, gasContainer,
             accommContainer, gearContainer, otherContainer;
     private View overlayView;
+    private ProgressBar progressBar;
+
+    //TODO: move this to shared pref
+    private static final int WEEK_LIMIT = 350;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         accommContainer = findViewById(R.id.container_accommodation);
         gearContainer = findViewById(R.id.container_gear);
         otherContainer = findViewById(R.id.container_other);
+
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     private void setupFab() {
@@ -197,6 +204,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         int total = CalculateUtil.getThisWeekTotal();
         totalText.setText(String.valueOf(total));
+
+        int percentTotal = getPercentTotal(total);
+        updateProgressBar(percentTotal);
+    }
+
+    private void updateProgressBar(int percentTotal) {
+        progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
+        if (percentTotal < 80) {
+            progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
+            progressBar.setProgress(percentTotal, true);
+        } else if (percentTotal < 100) {
+            progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
+            progressBar.setSecondaryProgress(percentTotal);
+        } else {
+            progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar_red));
+            progressBar.setProgress(100, true);
+        }
+    }
+
+    private int getPercentTotal(int total) {
+        float perc =(float) (total * 100) / WEEK_LIMIT;
+        int percInt =  Math.round(perc);
+        if (percInt >= 100)
+            return 100;
+        else
+            return percInt;
     }
 
     private void showFab() {

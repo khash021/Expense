@@ -9,7 +9,7 @@
 
     <!--    <color name="green">#00d814</color>-->
     <color name="green">#02ca14</color>
-    <color name="red">#ff0000</color>
+    <color name="red">#C90000</color>
 
     <!--Button-->
     <color name="button">#d752ff</color>
@@ -26,7 +26,7 @@
     <!--maybe-->
     <color name="colorAccentSecondary">#f45303</color>
     <!--maybe-->
-    <color name="colorAccentTertiary">#03f44f</color>
+    <color name="colorAccentTertiary">#0BAF42</color>
     <!--maybe-->
     <color name="colorAccentQuinary">#f49003</color>
     <!--maybe-->

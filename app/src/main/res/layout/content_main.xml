@@ -17,10 +17,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_title_date">
+        app:layout_constraintTop_toBottomOf="@id/text_title_date"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -41,10 +41,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_food">
+        app:layout_constraintTop_toBottomOf="@id/container_food"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -65,10 +65,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_alcohol">
+        app:layout_constraintTop_toBottomOf="@id/container_alcohol"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -81,7 +81,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/container_gas"
         android:layout_width="match_parent"
@@ -90,10 +89,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_weed">
+        app:layout_constraintTop_toBottomOf="@id/container_weed"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -106,6 +105,7 @@
 
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/container_accommodation"
         android:layout_width="match_parent"
@@ -114,10 +114,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_gas">
+        app:layout_constraintTop_toBottomOf="@id/container_gas"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -138,10 +138,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_accommodation">
+        app:layout_constraintTop_toBottomOf="@id/container_accommodation"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -162,10 +162,10 @@
         android:orientation="horizontal"
         android:padding="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_other">
+        app:layout_constraintTop_toBottomOf="@id/container_other"
+        tools:visibility="visible">
 
         <TextView
             style="@style/text_summary_main_title"
@@ -190,9 +190,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/container_gear">
 
-        <!--        <TextView-->
-        <!--            android:text="@string/total"-->
-        <!--            style="@style/text_summary_main_title" />-->
 
         <TextView
             android:id="@+id/text_total"
@@ -206,13 +203,29 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:max="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:progress="50"
+        tools:secondaryProgress="80"
+        />
+
     <TextView
         android:id="@+id/text_title_date"
         style="@style/text_view_general"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
         tools:text="Week 5: Monday, Feb.12.2020" />
 
 

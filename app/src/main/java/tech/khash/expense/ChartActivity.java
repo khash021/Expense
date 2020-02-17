@@ -66,18 +66,18 @@ public class ChartActivity extends BaseActivity {
         entries.add(gearEntry);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.red));
+        colors.add(getColor(R.color.red));
         //colors.add(R.color.red);
-        colors.add(getResources().getColor(R.color.green));
+        colors.add(getColor(R.color.green));
         //colors.add(R.color.colorAccentOctonary);
-        colors.add(getResources().getColor(R.color.blue_argb));
+        colors.add(getColor(R.color.blue_argb));
         //colors.add(R.color.background_light);
         //colors.add(R.color.blue_argb);
 
         chart.setUsePercentValues(false);
 
 
-        PieDataSet dataSet = new PieDataSet(entries, getResources().getString(R.string.this_week_chart));
+        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.this_week_chart));
 
         dataSet.setColors(colors);
 
