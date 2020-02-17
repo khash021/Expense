@@ -24,7 +24,8 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
     private ListClickListener listClickListener;
 
     public interface ListClickListener {
-        void onClick(int position);
+        void onExpenseListClick(int position);
+        void onExpenseListLongClick(int position);
     }
 
     public ExpenseEntityRecyclerAdapter(Context context, ArrayList<ExpenseEntity> expenses,
@@ -61,7 +62,8 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
             return expenses.size();
     }
 
-    class ExpenseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ExpenseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
 
         final TextView typeText, amountText, weekText, monthText, dateText, commentText;
 
@@ -76,11 +78,20 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
             commentText = itemView.findViewById(R.id.text_comment);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+            int position = getLayoutPosition();
+            listClickListener.onExpenseListClick(position);
+        }
 
+        @Override
+        public boolean onLongClick(View v) {
+            int position = getLayoutPosition();
+            listClickListener.onExpenseListLongClick(position);
+            return true;
         }
     }
 }

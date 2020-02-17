@@ -22,13 +22,77 @@ import tech.khash.expense.model.ExpenseEntity;
 
 public class DialogUtil {
 
+    public static void showExpenseDeleteEditDialog(@NonNull Context context,
+                                                   @NonNull final ExpenseListDialogListener expenseListDialogListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.expense_list_dialog_title));
 
-    public static class ShowDeleteConfirmationDialog extends AlertDialog {
+        String[] items = context.getResources().getStringArray(R.array.string_array_expense_list_dialog);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        expenseListDialogListener.onEditSelected();
+                        dialog.dismiss();
+                        return;
+                    case 1:
+                        expenseListDialogListener.onDeleteSelected();
+                        dialog.dismiss();
+                        return;
+                    default:
+                        dialog.dismiss();
+                        return;
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public interface ExpenseListDialogListener {
+        void onEditSelected();
+
+        void onDeleteSelected();
+    }
+
+    public static void showSingleExpenseDeleteConfirmationDialog(@NonNull Context context,
+                                                                 @NonNull final DeleteDialogListener deleteDialogListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.warning))
+                .setMessage(context.getString(R.string.delete_single_message))
+                .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteDialogListener.onDeleteSelected();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteDialogListener.onCancelSelected();
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public interface DeleteDialogListener {
+        void onDeleteSelected();
+
+        void onCancelSelected();
+    }
+
+
+    public static class ShowDeleteDatabaseConfirmationDialog extends AlertDialog {
         private Context context;
         private DeleteDialogListener listener;
 
-        public ShowDeleteConfirmationDialog(@NonNull Context context,
-                                            @NonNull final DeleteDialogListener deleteDialogListener) {
+        public ShowDeleteDatabaseConfirmationDialog(@NonNull Context context,
+                                                    @NonNull final DeleteDialogListener deleteDialogListener) {
             super(context);
             this.context = context;
             this.listener = deleteDialogListener;

@@ -28,6 +28,10 @@
             android:name="tech.khash.expense.AddNewExpenseActivity"
             android:label="@string/add_new_expense"
             android:parentActivityName="tech.khash.expense.MainActivity" />
+        <activity
+            android:name="tech.khash.expense.ChartActivity"
+            android:label="@string/chart"
+            android:parentActivityName="tech.khash.expense.MainActivity" />
     </application>
 
 </manifest>

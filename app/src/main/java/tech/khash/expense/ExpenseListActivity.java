@@ -16,10 +16,13 @@ import io.realm.RealmResults;
 import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
 import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.ExpenseEntity;
+import tech.khash.expense.util.CommonUtil;
+import tech.khash.expense.util.DialogUtil;
 
-public class ExpenseListActivity extends BaseActivity {
+public class ExpenseListActivity extends BaseActivity implements ExpenseEntityRecyclerAdapter.ListClickListener {
 
     private ArrayList<ExpenseEntity> expenseEntities;
+    private ExpenseEntityRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,8 @@ public class ExpenseListActivity extends BaseActivity {
         Collections.reverse(expenseEntities);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        ExpenseEntityRecyclerAdapter adapter = new ExpenseEntityRecyclerAdapter(this,
-                expenseEntities, null);
+        adapter = new ExpenseEntityRecyclerAdapter(this,
+                expenseEntities, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,
                 false));
         DividerItemDecoration decoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -52,5 +55,49 @@ public class ExpenseListActivity extends BaseActivity {
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         RealmResults<ExpenseEntity> results = query.findAll();
         expenseEntities.addAll(results);
+    }
+
+    @Override
+    public void onExpenseListClick(int position) {
+        try {
+            ExpenseEntity expenseEntity = expenseEntities.get(position);
+            long epoch = expenseEntity.getEpoch();
+            //TODO: go to edit
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onExpenseListLongClick(int position) {
+        try {
+            ExpenseEntity expenseEntity = expenseEntities.get(position);
+            long epoch = expenseEntity.getEpoch();
+            DialogUtil.showExpenseDeleteEditDialog(this, new DialogUtil.ExpenseListDialogListener() {
+                @Override
+                public void onEditSelected() {
+                    //TODO: go to edit
+                    CommonUtil.showToastShort(getApplicationContext(), "Edit");
+                }
+
+                @Override
+                public void onDeleteSelected() {
+                    DialogUtil.showSingleExpenseDeleteConfirmationDialog(ExpenseListActivity.this, new DialogUtil.DeleteDialogListener() {
+                        @Override
+                        public void onDeleteSelected() {
+                            //TODO: delete
+                            CommonUtil.showToastShort(getApplicationContext(), "Delete");
+                        }
+
+                        @Override
+                        public void onCancelSelected() {
+                            CommonUtil.showToastShort(getApplicationContext(), "Cancel");
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

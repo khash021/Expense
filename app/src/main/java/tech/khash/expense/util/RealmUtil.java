@@ -20,6 +20,8 @@ import tech.khash.expense.model.ExpenseEntity;
 
 public class RealmUtil {
 
+    //TODO: move to using async transaction instead
+
     public static void setDefaultRealmConfiguration() {
         RealmConfiguration defaultConfiguration = new RealmConfiguration.Builder()
                 .name("expense.realm")
@@ -32,12 +34,9 @@ public class RealmUtil {
     /*
         ------------------------------  INSERT/UPDATE/PATCH  -------------------------------
     */
-    public static void insertUpdateExpenseToRealm(final ExpenseEntity entity,
+    public static void insertUpdateExpenseToRealm(@NonNull final ExpenseEntity entity,
                                                   Realm.Transaction.OnSuccess successListener,
                                                   Realm.Transaction.OnError errorListener) {
-        if (entity == null)
-            return;
-
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -47,12 +46,75 @@ public class RealmUtil {
         }, successListener, errorListener);
     }
 
+    public static void updateExpenseEntityAmount(@NonNull final long epoch, @NonNull final int amount,
+                                                 Realm.Transaction.OnSuccess successListener,
+                                                 final Realm.Transaction.OnError errorListener) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+                query.equalTo(ExpenseEntity.EPOCH, epoch);
+                ExpenseEntity expenseEntity = query.findFirst();
+                if (expenseEntity == null) {
+                    if (errorListener != null)
+                        errorListener.onError(null);
+                } else {
+                    expenseEntity.setAmount(amount);
+                }
+            }
+        }, successListener, errorListener);
+    }
+
+    public static void updateExpenseEntityComment(@NonNull final long epoch, @NonNull final String comment,
+                                                  Realm.Transaction.OnSuccess successListener,
+                                                  final Realm.Transaction.OnError errorListener) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+                query.equalTo(ExpenseEntity.EPOCH, epoch);
+                ExpenseEntity expenseEntity = query.findFirst();
+                if (expenseEntity == null) {
+                    if (errorListener != null)
+                        errorListener.onError(null);
+                } else {
+                    expenseEntity.setComment(comment);
+                }
+            }
+        }, successListener, errorListener);
+    }
+
+    public static void updateExpenseEntityType(@NonNull final long epoch,
+                                               @ExpenseEntity.ExpenseTypeInt final int type,
+                                               Realm.Transaction.OnSuccess successListener,
+                                               final Realm.Transaction.OnError errorListener) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+                query.equalTo(ExpenseEntity.EPOCH, epoch);
+                ExpenseEntity expenseEntity = query.findFirst();
+                if (expenseEntity == null) {
+                    if (errorListener != null)
+                        errorListener.onError(null);
+                } else {
+                    expenseEntity.setType(type);
+                }
+            }
+        }, successListener, errorListener);
+    }
+
     /*
     ------------------------------  DELETE  ----------------------------------------
     */
     public static void deleteEntireDatabase(Realm.Transaction.OnSuccess successListener,
                                             Realm.Transaction.OnError errorListener) {
-
 
 
         Realm realm = Realm.getDefaultInstance();
@@ -69,10 +131,43 @@ public class RealmUtil {
         realm.close();
     }
 
+    public static void deleteSingleExpenseEpoch(@NonNull final long epoch,
+                                                Realm.Transaction.OnSuccess successListener,
+                                                final Realm.Transaction.OnError errorListener) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+                query.equalTo(ExpenseEntity.EPOCH, epoch);
+                RealmResults<ExpenseEntity> results = query.findAll();
+                if (CommonUtil.isEmptyList(results))
+                    errorListener.onError(null);
+                else {
+                    results.deleteAllFromRealm();
+                }
+            }
+        }, successListener, errorListener);
+    }
+
     /*
         ------------------------------  QUERY  -------------------------------
     */
-    public static ArrayList<ExpenseEntity> getThisWeekExpensesAll () {
+    public static ExpenseEntity getExpenseEntityEpoch(long epoch) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.equalTo(ExpenseEntity.EPOCH, epoch);
+        RealmResults<ExpenseEntity> results = query.findAll();
+        if (CommonUtil.isEmptyList(results))
+            return null;
+        else {
+            return results.get(0);
+        }
+    }
+
+    public static ArrayList<ExpenseEntity> getThisWeekExpensesAll() {
         int week = DateTimeUtil.getThisWeekInt();
         Realm realm = Realm.getDefaultInstance();
 
@@ -86,7 +181,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getThisWeekExpensesTyped (@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getThisWeekExpensesTyped(@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         int week = DateTimeUtil.getThisWeekInt();
 
         Realm realm = Realm.getDefaultInstance();
@@ -101,7 +196,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getWeekExpensesAll (@NonNull int week) {
+    public static ArrayList<ExpenseEntity> getWeekExpensesAll(@NonNull int week) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
@@ -113,7 +208,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getWeekExpensesTyped (@NonNull int week, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getWeekExpensesTyped(@NonNull int week, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
@@ -126,7 +221,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getThisMonthExpensesAll () {
+    public static ArrayList<ExpenseEntity> getThisMonthExpensesAll() {
         int month = DateTimeUtil.getThisMonthInt();
 
         Realm realm = Realm.getDefaultInstance();
@@ -140,7 +235,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getThisMonthExpensesTyped (@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getThisMonthExpensesTyped(@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         int month = DateTimeUtil.getThisMonthInt();
 
         Realm realm = Realm.getDefaultInstance();
@@ -155,7 +250,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getMonthExpensesAll (@NonNull int month) {
+    public static ArrayList<ExpenseEntity> getMonthExpensesAll(@NonNull int month) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
@@ -167,7 +262,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getMonthExpensesTyped (@NonNull int month, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getMonthExpensesTyped(@NonNull int month, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
@@ -180,7 +275,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getThisYearExpensesAll () {
+    public static ArrayList<ExpenseEntity> getThisYearExpensesAll() {
         int year = DateTimeUtil.getThisYearInt();
 
         Realm realm = Realm.getDefaultInstance();
@@ -194,7 +289,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getThisYearExpensesTyped (@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getThisYearExpensesTyped(@NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         int year = DateTimeUtil.getThisYearInt();
 
         Realm realm = Realm.getDefaultInstance();
@@ -209,7 +304,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getYearExpensesAll (@NonNull int year) {
+    public static ArrayList<ExpenseEntity> getYearExpensesAll(@NonNull int year) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.YEAR, year);
@@ -221,7 +316,7 @@ public class RealmUtil {
         return expenses;
     }
 
-    public static ArrayList<ExpenseEntity> getYearExpensesTyped (@NonNull int year, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
+    public static ArrayList<ExpenseEntity> getYearExpensesTyped(@NonNull int year, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.YEAR, year);
@@ -236,6 +331,7 @@ public class RealmUtil {
 
     public interface RealmSuccessListener {
         void onSuccess();
+
         void onFailure();
     }
 

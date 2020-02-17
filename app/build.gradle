@@ -32,4 +32,5 @@ dependencies {
     //implementation 'io.realm:android-adapters:2.0.0'
     implementation 'joda-time:joda-time:2.10.5'
     implementation "com.leinardi.android:speed-dial:3.1.1"
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

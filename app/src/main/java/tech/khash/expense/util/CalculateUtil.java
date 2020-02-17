@@ -14,7 +14,7 @@ public class CalculateUtil {
     public static int getThisWeekTotal() {
         ArrayList<ExpenseEntity> expenses = RealmUtil.getThisWeekExpensesAll();
         if (CommonUtil.isEmptyList(expenses))
-            return -1;
+            return 0;
 
         int total = 0;
         for (ExpenseEntity expenseEntity : expenses) {

@@ -29,7 +29,7 @@ import tech.khash.expense.util.RealmUtil;
 import tech.khash.expense.util.ViewUtil;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,
-        SpeedDialView.OnActionSelectedListener, DialogUtil.ShowDeleteConfirmationDialog.DeleteDialogListener {
+        SpeedDialView.OnActionSelectedListener, DialogUtil.ShowDeleteDatabaseConfirmationDialog.DeleteDialogListener {
 
     private SpeedDialView fab;
     private TextView weekTitleText,foodText, alcoholText, weedText, gasText, accommText, gearText,
@@ -275,20 +275,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             case R.id.action_settings:
                 return true;
             case R.id.action_list:
-                Intent intent = new Intent(MainActivity.this, ExpenseListActivity.class);
-                startActivity(intent);
+                Intent listIntent = new Intent(MainActivity.this, ExpenseListActivity.class);
+                startActivity(listIntent);
                 return true;
             case R.id.action_delete_all:
                 showDeleteConfirmationDialog();
                 return true;
+            case R.id.action_chart:
+                Intent chartIntent = new Intent(MainActivity.this, ChartActivity.class);
+                startActivity(chartIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void showDeleteConfirmationDialog() {
-        DialogUtil.ShowDeleteConfirmationDialog dialog =
-                new DialogUtil.ShowDeleteConfirmationDialog(this, this);
+        DialogUtil.ShowDeleteDatabaseConfirmationDialog dialog =
+                new DialogUtil.ShowDeleteDatabaseConfirmationDialog(this, this);
     }
 
     private void deleteAll() {

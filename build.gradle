@@ -6,6 +6,7 @@ buildscript {
         google()
         jcenter()
 
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
@@ -22,6 +23,7 @@ allprojects {
         maven {
             url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
+        maven { url 'https://jitpack.io' }
     }
 }
 

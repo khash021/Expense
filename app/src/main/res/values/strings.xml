@@ -26,7 +26,7 @@
     <string name="comments_hint">Enter comments here</string>
     <string name="submit">Submit</string>
 
-    <!--Dialod and Toasts-->
+    <!--Dialog and Toasts-->
     <string name="please_complete_all_fields">Please complete all required fields</string>
     <string name="submitted_successfully">Submitted successfully</string>
     <string name="submitted_failure">An unexpected occurred\nPlease try again</string>
@@ -36,6 +36,12 @@
     <string name="delete_all_message">Are you sure you want to delete the entire database?</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+
+    <string name="delete_single_message">Are you sure you want to delete this expense?</string>
+
+    <string name="expense_list_dialog_title">What to do?</string>
+    <string name="expense_list_dialog_edit">Edit</string>
+    <string name="expense_list_dialog_delete">Delete</string>
 
     <!--Other-->
     <string name="type">Type</string>
@@ -47,9 +53,13 @@
     <string name="list">List</string>
     <string name="total">Total</string>
     <string name="monday">Monday</string>
+
     <!--Since we are formatting the text, we can't directly use html tags, instead we need to
          escape using &lt; instead of the opening brackets-->
     <string name="main_report_title_date">Week &lt;big>&lt;b>%1d&lt;/b>&lt;/big> : %2s</string>
     <string name="switch_expense_type">Switch Expense Type</string>
+    <string name="chart">Chart</string>
+    <string name="this_week_chart">This week\'s Chart</string>
+
 
 </resources>

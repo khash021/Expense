@@ -3,6 +3,7 @@ package tech.khash.expense.model;
 import android.text.TextUtils;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.StringDef;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -47,15 +48,19 @@ public class ExpenseEntity extends RealmObject {
     private String todayDateTimeStr;
     private String mondayDateTimeStr;
 
-    public static final String EPOCH = "epoch";
-    public static final String AMOUNT = "amount";
-    public static final String TYPE = "type";
-    public static final String WEEK_OF_THE_YEAR = "weekOfTheYear";
-    public static final String MONTH_OF_THE_YEAR = "monthOfTheYear";
-    public static final String YEAR = "year";
-    public static final String COMMENT = "comment";
-    public static final String TODAY_DATE_STR = "todayDateTimeStr";
-    public static final String MONDAY_DATE_STR = "mondayDateTimeStr";
+    @StringDef ({EPOCH, AMOUNT, TYPE, WEEK_OF_THE_YEAR, MONTH_OF_THE_YEAR, YEAR, COMMENT,
+            TODAY_DATE_STR, MONDAY_DATE_STR})
+    public @interface ExpenseFieldsStr {}
+
+    public static final @ExpenseFieldsStr String EPOCH = "epoch";
+    public static final @ExpenseFieldsStr String AMOUNT = "amount";
+    public static final @ExpenseFieldsStr String TYPE = "type";
+    public static final @ExpenseFieldsStr String WEEK_OF_THE_YEAR = "weekOfTheYear";
+    public static final @ExpenseFieldsStr String MONTH_OF_THE_YEAR = "monthOfTheYear";
+    public static final @ExpenseFieldsStr String YEAR = "year";
+    public static final @ExpenseFieldsStr String COMMENT = "comment";
+    public static final @ExpenseFieldsStr String TODAY_DATE_STR = "todayDateTimeStr";
+    public static final @ExpenseFieldsStr String MONDAY_DATE_STR = "mondayDateTimeStr";
 
     public ExpenseEntity() {
     }
