@@ -140,7 +140,7 @@ public class DialogUtil {
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             ConstraintLayout view = (ConstraintLayout) View
-                    .inflate(context, R.layout.alert_dialog_expense_list, null);
+                    .inflate(context, R.layout.dialog_expense_list, null);
 
             ImageButton cancelButton = view.findViewById(R.id.alert_dialog_expense_type_cancel_button);
             cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -179,31 +179,4 @@ public class DialogUtil {
         }
     }
 
-
-//    public static void showDeleteConfirmationDialog(@NonNull Context context,
-//                                                    @NonNull final DialodUtil.DeleteDialogListener deleteDialogListener) {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context)
-//                .setTitle(context.getString(R.string.warning))
-//                .setMessage(context.getString(R.string.delete_all_message))
-//                .setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onListItemClick(DialogInterface dialog, int which) {
-//                        deleteDialogListener.onDeleteSelected();
-//                    }
-//                })
-//                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onListItemClick(DialogInterface dialog, int which) {
-//                        deleteDialogListener.onCancelSelected();
-//                        dialog.dismiss();
-//                    }
-//                });
-//        builder.create().show();
-//    }
-//
-//    public interface DeleteDialogListener {
-//        void onDeleteSelected();
-//        void onCancelSelected();
-//    }
 }

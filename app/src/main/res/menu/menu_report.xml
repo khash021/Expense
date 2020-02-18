@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_revert"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_arrow_back_white_24dp"
+        android:title="@string/last_week_report"
+        app:showAsAction="always" />
+
+</menu>

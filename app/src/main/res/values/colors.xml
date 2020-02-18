@@ -40,4 +40,6 @@
     <color name="white">#ffffff</color>
     <color name="dark_grey">#3a3a3a</color>
 
+    <color name="transparent">#80FFFFFF</color>
+
 </resources>

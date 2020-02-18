@@ -20,6 +20,19 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ImageButton
+        android:id="@+id/image_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_x_white"
+        android:background="@android:color/transparent"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+
     <View
         android:id="@+id/fab_overlay"
         android:layout_width="match_parent"

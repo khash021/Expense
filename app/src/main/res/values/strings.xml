@@ -59,7 +59,10 @@
     <string name="main_report_title_date">Week &lt;big>&lt;b>%1d&lt;/b>&lt;/big> : %2s</string>
     <string name="switch_expense_type">Switch Expense Type</string>
     <string name="chart">Chart</string>
+
+
     <string name="this_week_chart">This week\'s Chart</string>
+    <string name="last_week_report">Last Week\'s Report</string>
 
 
 </resources>
