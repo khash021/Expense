@@ -5,7 +5,7 @@
         android:drawable="@drawable/progress_bar_background" />
     <item
         android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/progress_bar_secondary_orange" />
+        android:drawable="@drawable/progress_bar_orange" />
     <item
         android:id="@android:id/progress"
         android:drawable="@drawable/progress_bar_primary_red" />

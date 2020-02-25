@@ -11,40 +11,50 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import io.realm.Realm;
 import tech.khash.expense.base.BaseActivity;
+import tech.khash.expense.model.AmountEntity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
-import tech.khash.expense.util.CalculateUtil;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DateTimeUtil;
 import tech.khash.expense.util.DialogUtil;
 import tech.khash.expense.util.RealmUtil;
+import tech.khash.expense.util.SharedPreferencesUtil;
 import tech.khash.expense.util.ViewUtil;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,
         SpeedDialView.OnActionSelectedListener, DialogUtil.ShowDeleteDatabaseConfirmationDialog.DeleteDialogListener {
 
     private SpeedDialView fab;
-    private TextView weekTitleText,foodText, alcoholText, weedText, gasText, accommText, gearText,
-            otherText, totalText;
+    private TextView weekTitleText, foodText, alcoholText, weedText, gasText, accommText, gearText,
+            otherText, totalText, toolbarText, remainingText;
     private LinearLayout foodContainer, alcoholContainer, weedContainer, gasContainer,
             accommContainer, gearContainer, otherContainer;
     private View overlayView;
     private ImageButton imageButtonClose;
     private ProgressBar progressBarBudget, progressBarLoading;
+    private ConstraintLayout mainLayout;
     private boolean isReportMenu = false;
+    private HashMap<String, AmountEntity> amountEntityHashMap;
 
     //TODO: move this to shared pref
-    public static final int WEEK_LIMIT = 350;
+    private int weeklyBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +65,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         initViews();
         setupFab();
+        updateWeeklyLimit();
         updateView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        isReportMenu = false;
-        invalidateOptionsMenu();
+        updateWeeklyLimit();
         updateView();
     }
 
     private void initViews() {
+        mainLayout = findViewById(R.id.container_main);
+        mainLayout.setOnClickListener(this);
+
         fab = findViewById(R.id.fab);
         overlayView = findViewById(R.id.fab_overlay);
 
@@ -82,7 +95,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         gearText = findViewById(R.id.text_gear);
         otherText = findViewById(R.id.text_other);
         totalText = findViewById(R.id.text_total);
-
+        toolbarText = findViewById(R.id.text_toolbar_report_title);
+        remainingText = findViewById(R.id.text_remaining);
 
         foodContainer = findViewById(R.id.container_food);
         alcoholContainer = findViewById(R.id.container_alcohol);
@@ -153,9 +167,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onToggleChanged(boolean isOpen) {
                 if (isOpen) {
-                    ViewUtil.showFadeView(overlayView, 300, 0.5f);
+                    ViewUtil.fadeInView(overlayView, 300, 0.5f);
                 } else {
-                    ViewUtil.hideFadeView(overlayView, 300);
+                    ViewUtil.fadeOutView(overlayView, 300);
                 }
             }
         });
@@ -163,158 +177,254 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private void updateView() {
         progressBarLoading.setVisibility(View.VISIBLE);
-        if (!isReportMenu) {
-            int thisWeek = DateTimeUtil.getWeekOfTheYear();
-            String mondayStr = DateTimeUtil.getMondayDateTimeStr();
+        clearReportTexts();
+        if (CommonUtil.isHashMapEmpty(amountEntityHashMap))
+            amountEntityHashMap = new HashMap<>();
 
-            String title = getString(R.string.main_report_title_date, thisWeek, mondayStr);
-            Spanned styledTitle = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY);
-            weekTitleText.setText(styledTitle);
-
-            int food = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.FOOD);
-            if (food > 0) {
-                foodContainer.setVisibility(View.VISIBLE);
-                foodText.setText(String.valueOf(food));
-            }
-
-            int alcohol = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.ALCOHOL);
-            if (alcohol > 0) {
-                alcoholContainer.setVisibility(View.VISIBLE);
-                alcoholText.setText(String.valueOf(alcohol));
-            }
-
-            int weed = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.WEED);
-            if (weed > 0) {
-                weedContainer.setVisibility(View.VISIBLE);
-                weedText.setText(String.valueOf(weed));
-            }
-
-            int gas = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.GAS);
-            if (gas > 0) {
-                gasContainer.setVisibility(View.VISIBLE);
-                gasText.setText(String.valueOf(gas));
-            }
-
-            int accommodation = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.ACCOMMODATION);
-            if (accommodation > 0) {
-                accommContainer.setVisibility(View.VISIBLE);
-                accommText.setText(String.valueOf(accommodation));
-            }
-
-            int other = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.OTHER);
-            if (other > 0) {
-                otherContainer.setVisibility(View.VISIBLE);
-                otherText.setText(String.valueOf(other));
-            }
-
-            int gear = CalculateUtil.getThisWeekTotalTyped(ExpenseEntity.GEAR);
-            if (gear > 0) {
-                gearContainer.setVisibility(View.VISIBLE);
-                gearText.setText(String.valueOf(gear));
-            }
-
-            int total = CalculateUtil.getThisWeekTotal();
-            totalText.setText(String.valueOf(total));
-
-            int percentTotal = getPercentTotal(total);
-            updateProgressBar(percentTotal);
-        } else {
-            int lastWeek = DateTimeUtil.getWeekOfTheYear() - 1;
-            //TODO monday string
-            //String mondayStr = DateTimeUtil.getMondayDateTimeStr();
-
-            //String title = getString(R.string.main_report_title_date, lastWeek, mondayStr);
-            //Spanned styledTitle = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY);
-            //weekTitleText.setText(styledTitle);
-            weekTitleText.setText("Week - " + lastWeek);
-
-            int food = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.FOOD);
-            if (food > 0) {
-                foodContainer.setVisibility(View.VISIBLE);
-                foodText.setText(String.valueOf(food));
-            }
-
-            int alcohol = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.ALCOHOL);
-            if (alcohol > 0) {
-                alcoholContainer.setVisibility(View.VISIBLE);
-                alcoholText.setText(String.valueOf(alcohol));
-            }
-
-            int weed = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.WEED);
-            if (weed > 0) {
-                weedContainer.setVisibility(View.VISIBLE);
-                weedText.setText(String.valueOf(weed));
-            }
-
-            int gas = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.GAS);
-            if (gas > 0) {
-                gasContainer.setVisibility(View.VISIBLE);
-                gasText.setText(String.valueOf(gas));
-            }
-
-            int accommodation = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.ACCOMMODATION);
-            if (accommodation > 0) {
-                accommContainer.setVisibility(View.VISIBLE);
-                accommText.setText(String.valueOf(accommodation));
-            }
-
-            int other = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.OTHER);
-            if (other > 0) {
-                otherContainer.setVisibility(View.VISIBLE);
-                otherText.setText(String.valueOf(other));
-            }
-
-            int gear = CalculateUtil.getWeekTotalTyped(lastWeek, ExpenseEntity.GEAR);
-            if (gear > 0) {
-                gearContainer.setVisibility(View.VISIBLE);
-                gearText.setText(String.valueOf(gear));
-            }
-
-            int total = CalculateUtil.getWeekTotal(lastWeek);
-            totalText.setText(String.valueOf(total));
-
-            int percentTotal = getPercentTotal(total);
-            updateProgressBar(percentTotal);
-        }
+        if (!isReportMenu)
+            showThisWeekData();
+        else
+            showLastWeekReport();
         progressBarLoading.setVisibility(View.GONE);
     }
 
-    private void updateProgressBar(int percentTotal) {
-        progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
-        if (percentTotal < 80) {
-            progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
-            progressBarBudget.setProgress(percentTotal, true);
-        } else if (percentTotal < 100) {
-            progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar));
-            progressBarBudget.setSecondaryProgress(percentTotal);
+    private void clearReportTexts() {
+        foodContainer.setVisibility(View.GONE);
+        alcoholContainer.setVisibility(View.GONE);
+        weedContainer.setVisibility(View.GONE);
+        gasContainer.setVisibility(View.GONE);
+        accommContainer.setVisibility(View.GONE);
+        otherContainer.setVisibility(View.GONE);
+        gearContainer.setVisibility(View.GONE);
+    }
+
+    private void showThisWeekData() {
+        AmountEntity thisWeekAmountEntity;
+        if (amountEntityHashMap.containsKey(Constants.THIS_WEEK_EXPENSE_KEY)) {
+            thisWeekAmountEntity = amountEntityHashMap.get(Constants.THIS_WEEK_EXPENSE_KEY);
         } else {
-            progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.progress_bar_red));
+            ArrayList<ExpenseEntity> expenseEntities = RealmUtil.getThisWeekExpensesAll();
+            int thisWeek = DateTimeUtil.getWeekOfTheYear();
+            String mondayStr = DateTimeUtil.getMondayDateTimeStr();
+
+            thisWeekAmountEntity = new AmountEntity(expenseEntities, thisWeek, mondayStr);
+            if (thisWeekAmountEntity == null)
+                return;
+            else
+                amountEntityHashMap.put(Constants.THIS_WEEK_EXPENSE_KEY, thisWeekAmountEntity);
+        }
+
+        String title = getString(R.string.main_report_title_date, thisWeekAmountEntity.getWeek(),
+                thisWeekAmountEntity.getMondayStr());
+        Spanned styledTitle = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY);
+        weekTitleText.setText(styledTitle);
+
+        int food = thisWeekAmountEntity.getFood();
+        if (food > 0) {
+            foodContainer.setVisibility(View.VISIBLE);
+            foodText.setText(String.valueOf(food));
+        }
+
+        int alcohol = thisWeekAmountEntity.getAlcohol();
+        if (alcohol > 0) {
+            alcoholContainer.setVisibility(View.VISIBLE);
+            alcoholText.setText(String.valueOf(alcohol));
+        }
+
+        int weed = thisWeekAmountEntity.getWeed();
+        if (weed > 0) {
+            weedContainer.setVisibility(View.VISIBLE);
+            weedText.setText(String.valueOf(weed));
+        }
+
+        int gas = thisWeekAmountEntity.getGas();
+        if (gas > 0) {
+            gasContainer.setVisibility(View.VISIBLE);
+            gasText.setText(String.valueOf(gas));
+        }
+
+        int accommodation = thisWeekAmountEntity.getAccommodation();
+        if (accommodation > 0) {
+            accommContainer.setVisibility(View.VISIBLE);
+            accommText.setText(String.valueOf(accommodation));
+        }
+
+        int other = thisWeekAmountEntity.getOther();
+        if (other > 0) {
+            otherContainer.setVisibility(View.VISIBLE);
+            otherText.setText(String.valueOf(other));
+        }
+
+        int gear = thisWeekAmountEntity.getGear();
+        if (gear > 0) {
+            gearContainer.setVisibility(View.VISIBLE);
+            gearText.setText(String.valueOf(gear));
+        }
+
+        int total = thisWeekAmountEntity.getTotal();
+        totalText.setText(String.valueOf(total));
+
+        int remaining = thisWeekAmountEntity.getRemaining(weeklyBudget);
+        showWeeklyRemaining(remaining);
+
+        int percentTotal = getPercentTotal(total);
+        updateProgressBar(percentTotal);
+    }
+
+    private void showLastWeekReport() {
+        AmountEntity lastWeekAmountEntity;
+        if (amountEntityHashMap.containsKey(Constants.LAST_WEEK_EXPENSE_KEY)) {
+            lastWeekAmountEntity = amountEntityHashMap.get(Constants.LAST_WEEK_EXPENSE_KEY);
+        } else {
+            int lastWeek = DateTimeUtil.getWeekOfTheYear() - 1;
+            ArrayList<ExpenseEntity> expenseEntities = RealmUtil.getWeekExpensesAll(lastWeek);
+            long epoch = expenseEntities.get(0).getEpoch();
+            DateTime mondayDateTime = new DateTime(epoch);
+            String mondayStr = DateTimeUtil.getMondayDateTimeStr(mondayDateTime);
+
+            lastWeekAmountEntity = new AmountEntity(expenseEntities, lastWeek, mondayStr);
+            if (lastWeekAmountEntity == null)
+                return;
+            else
+                amountEntityHashMap.put(Constants.LAST_WEEK_EXPENSE_KEY, lastWeekAmountEntity);
+        }
+
+        String title = getString(R.string.main_report_title_date, lastWeekAmountEntity.getWeek(),
+                lastWeekAmountEntity.getMondayStr());
+        Spanned styledTitle = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY);
+        weekTitleText.setText(styledTitle);
+
+        int food = lastWeekAmountEntity.getFood();
+        if (food > 0) {
+            foodContainer.setVisibility(View.VISIBLE);
+            foodText.setText(String.valueOf(food));
+        }
+
+        int alcohol = lastWeekAmountEntity.getAlcohol();
+        if (alcohol > 0) {
+            alcoholContainer.setVisibility(View.VISIBLE);
+            alcoholText.setText(String.valueOf(alcohol));
+        }
+
+        int weed = lastWeekAmountEntity.getWeed();
+        if (weed > 0) {
+            weedContainer.setVisibility(View.VISIBLE);
+            weedText.setText(String.valueOf(weed));
+        }
+
+        int gas = lastWeekAmountEntity.getGas();
+        if (gas > 0) {
+            gasContainer.setVisibility(View.VISIBLE);
+            gasText.setText(String.valueOf(gas));
+        }
+
+        int accommodation = lastWeekAmountEntity.getAccommodation();
+        if (accommodation > 0) {
+            accommContainer.setVisibility(View.VISIBLE);
+            accommText.setText(String.valueOf(accommodation));
+        }
+
+        int other = lastWeekAmountEntity.getOther();
+        if (other > 0) {
+            otherContainer.setVisibility(View.VISIBLE);
+            otherText.setText(String.valueOf(other));
+        }
+
+        int gear = lastWeekAmountEntity.getGear();
+        if (gear > 0) {
+            gearContainer.setVisibility(View.VISIBLE);
+            gearText.setText(String.valueOf(gear));
+        }
+
+        int total = lastWeekAmountEntity.getTotal();
+        totalText.setText(String.valueOf(total));
+
+        int remaining = lastWeekAmountEntity.getRemaining(weeklyBudget);
+        showWeeklyRemaining(remaining);
+
+        int percentTotal = getPercentTotal(total);
+        updateProgressBar(percentTotal);
+    }
+
+    private void updateProgressBar(int percentTotal) {
+        progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this,
+                R.drawable.progress_bar));
+        if (percentTotal < 100) {
+            progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this,
+                    R.drawable.progress_bar));
+            progressBarBudget.setProgress(percentTotal, true);
+            progressBarBudget.setSecondaryProgress(100);
+        } else {
+            progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this,
+                    R.drawable.progress_bar_red));
             progressBarBudget.setProgress(100, true);
         }
     }
 
     private int getPercentTotal(int total) {
-        float perc =(float) (total * 100) / WEEK_LIMIT;
-        int percInt =  Math.round(perc);
+        float perc = (float) (total * 100) / weeklyBudget;
+        int percInt = Math.round(perc);
         if (percInt >= 100)
             return 100;
         else
             return percInt;
     }
 
-    private void showFab() {
-        if (fab != null)
-            fab.show();
+    private void showWeeklyRemaining(@NonNull int remaining) {
+        if (remaining < 0) {
+            remainingText.setText("- " + remaining);
+            remainingText.setTextColor(getColor(R.color.red));
+        } else if (remaining > 0) {
+            remainingText.setText("+ " + remaining);
+            remainingText.setTextColor(getColor(R.color.colorAccentTertiary));
+        } else {
+            remainingText.setText(String.valueOf(remaining));
+            remainingText.setTextColor(getColor(R.color.colorAccentQuinary));
+        }
     }
 
-    private void hideFab() {
-        if (fab != null)
-            fab.hide();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isReportMenu) {
+            getMenuInflater().inflate(R.menu.menu_report, menu);
+            imageButtonClose.setVisibility(View.VISIBLE);
+            toolbarText.setVisibility(View.VISIBLE);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            imageButtonClose.setVisibility(View.GONE);
+            toolbarText.setVisibility(View.GONE);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
+        return true;
     }
 
-    private void closeFab() {
-        if (fab != null && fab.isOpen())
-            fab.close();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(settingsIntent, Constants.REQUEST_CODE_SETTINMGS);
+                return true;
+            case R.id.action_list:
+                Intent listIntent = new Intent(MainActivity.this, ExpenseListActivity.class);
+                startActivity(listIntent);
+                return true;
+            case R.id.action_delete_all:
+                showDeleteConfirmationDialog();
+                return true;
+            case R.id.action_chart:
+                Intent chartIntent = new Intent(MainActivity.this, ChartActivity.class);
+                startActivity(chartIntent);
+                return true;
+            case R.id.action_report_last_week:
+                isReportMenu = true;
+                invalidateOptionsMenu();
+                updateView();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -324,13 +434,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 closeFab();
                 break;
             case R.id.image_close:
-                isReportMenu = false;
-                invalidateOptionsMenu();
-                updateView();
+                closeReportView();
+                break;
+            case R.id.container_main:
+                if (isReportMenu)
+                    closeReportView();
                 break;
             default:
                 break;
         }
+    }
+
+    private void closeReportView() {
+        isReportMenu = false;
+        invalidateOptionsMenu();
+        updateView();
     }
 
     @Override
@@ -359,7 +477,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 intent.putExtra(Constants.ADD_NEW_EXPENSE_EXTRA_TYPE, ExpenseEntity.OTHER);
                 break;
         }
-        startActivityForResult(intent,Constants.REQUEST_CODE_ADD_NEW_EXPENSE);
+        startActivityForResult(intent, Constants.REQUEST_CODE_ADD_NEW_EXPENSE);
         return false;
     }
 
@@ -367,52 +485,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_ADD_NEW_EXPENSE && resultCode == RESULT_OK) {
+            if (amountEntityHashMap.containsKey(Constants.THIS_WEEK_EXPENSE_KEY))
+                amountEntityHashMap.remove(Constants.THIS_WEEK_EXPENSE_KEY);
             updateView();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (isReportMenu) {
-            getMenuInflater().inflate(R.menu.menu_report, menu);
-            imageButtonClose.setVisibility(View.VISIBLE);
-            setTitle(R.string.last_week_report);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-            imageButtonClose.setVisibility(View.GONE);
-            setTitle(R.string.app_name);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            case R.id.action_list:
-                Intent listIntent = new Intent(MainActivity.this, ExpenseListActivity.class);
-                startActivity(listIntent);
-                return true;
-            case R.id.action_delete_all:
-                showDeleteConfirmationDialog();
-                return true;
-            case R.id.action_chart:
-                Intent chartIntent = new Intent(MainActivity.this, ChartActivity.class);
-                startActivity(chartIntent);
-                return true;
-            case R.id.action_report_last_week:
-                isReportMenu = true;
-                invalidateOptionsMenu();
-                updateView();
-                return true;
-            case R.id.action_revert:
-                isReportMenu = false;
-                invalidateOptionsMenu();
-                updateView();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        } else if (requestCode == Constants.REQUEST_CODE_SETTINMGS) {
+            updateWeeklyLimit();
+            updateView();
         }
     }
 
@@ -438,7 +516,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         });
     }
 
-
     @Override
     public void onDeleteSelected() {
         deleteAll();
@@ -447,5 +524,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onCancelSelected() {
         CommonUtil.showToastShort(this, "CANCEL");
+    }
+
+    private void showFab() {
+        if (fab != null)
+            fab.show();
+    }
+
+    private void hideFab() {
+        if (fab != null)
+            fab.hide();
+    }
+
+    private void closeFab() {
+        if (fab != null && fab.isOpen())
+            fab.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isReportMenu) {
+            closeReportView();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private void updateWeeklyLimit() {
+        weeklyBudget = SharedPreferencesUtil.getWeeklyBudget(this);
     }
 }

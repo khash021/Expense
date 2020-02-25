@@ -3,18 +3,27 @@
     package="tech.khash.expense">
 
     <application
-        android:name="tech.khash.expense.RealmTestApplication"
+        android:name=".RealmTestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="tech.khash.expense.ExpenseListActivity"
-            android:label="@string/expense_list"
-            android:parentActivityName="tech.khash.expense.MainActivity"/>
         <activity
-            android:name="tech.khash.expense.MainActivity"
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="tech.khash.expense.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ExpenseListActivity"
+            android:label="@string/expense_list"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,13 +34,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="tech.khash.expense.AddNewExpenseActivity"
+            android:name=".AddNewExpenseActivity"
             android:label="@string/add_new_expense"
-            android:parentActivityName="tech.khash.expense.MainActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="tech.khash.expense.ChartActivity"
+            android:name=".ChartActivity"
             android:label="@string/chart"
-            android:parentActivityName="tech.khash.expense.MainActivity" />
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

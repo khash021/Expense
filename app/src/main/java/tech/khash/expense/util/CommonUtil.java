@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public class CommonUtil {
 
@@ -19,5 +20,9 @@ public class CommonUtil {
 
     public static boolean isEmptyList(Collection<?> list) {
         return list == null || list.isEmpty();
+    }
+
+    public static boolean isHashMapEmpty(HashMap<?, ?> hashMap) {
+        return hashMap == null || hashMap.size() <= 0;
     }
 }

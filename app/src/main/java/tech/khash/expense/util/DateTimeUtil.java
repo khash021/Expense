@@ -22,6 +22,13 @@ public class DateTimeUtil {
         return formatter.print(mondayDateTime);
     }
 
+    public static String getMondayDateTimeStr(DateTime dateTime) {
+        DateTime mondayDateTime = dateTime.withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, MMM.dd.YYYY");
+
+        return formatter.print(mondayDateTime);
+    }
+
     public static int getThisWeekInt() {
         DateTime todayDateTime = new DateTime();
         return todayDateTime.withDayOfWeek(DateTimeConstants.MONDAY).getWeekOfWeekyear();
