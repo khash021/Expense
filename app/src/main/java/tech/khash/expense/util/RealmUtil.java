@@ -20,8 +20,6 @@ import tech.khash.expense.model.ExpenseEntity;
 
 public class RealmUtil {
 
-    //TODO: move to using async transaction instead
-
     public static void setDefaultRealmConfiguration() {
         RealmConfiguration defaultConfiguration = new RealmConfiguration.Builder()
                 .name("expense.realm")
@@ -46,6 +44,30 @@ public class RealmUtil {
         }, successListener, errorListener);
     }
 
+    public static void updateExpenseEntity (@NonNull final long epoch, @NonNull final int amount,
+                                            @NonNull final int type, final String comment,
+                                            Realm.Transaction.OnSuccess successListener,
+                                            final Realm.Transaction.OnError errorListener) {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+                query.equalTo(ExpenseEntity.EPOCH, epoch);
+                ExpenseEntity expenseEntity = query.findFirst();
+                if (expenseEntity == null) {
+                    if (errorListener != null)
+                        errorListener.onError(new Throwable("Entity not found"));
+                } else {
+                    expenseEntity.setType(type);
+                    expenseEntity.setAmount(amount);
+                    expenseEntity.setComment(comment);
+                }
+            }
+        }, successListener, errorListener);
+    }
+
     public static void updateExpenseEntityAmount(@NonNull final long epoch, @NonNull final int amount,
                                                  Realm.Transaction.OnSuccess successListener,
                                                  final Realm.Transaction.OnError errorListener) {
@@ -60,9 +82,8 @@ public class RealmUtil {
                 if (expenseEntity == null) {
                     if (errorListener != null)
                         errorListener.onError(null);
-                } else {
+                } else
                     expenseEntity.setAmount(amount);
-                }
             }
         }, successListener, errorListener);
     }

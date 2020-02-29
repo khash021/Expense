@@ -11,6 +11,13 @@
     <string name="add_new_expense_gear">Add Gear</string>
     <string name="add_new_expense_other">Add Other</string>
     <string name="expense_list">Expense List</string>
+    <string name="edit_expense_food">Edit Food</string>
+    <string name="edit_expense_alcohol">Edit Alcohol</string>
+    <string name="edit_expense_weed">Edit Weed</string>
+    <string name="edit_expense_gas">Edit Gas</string>
+    <string name="edit_expense_accommodation">Edit Accommodation</string>
+    <string name="edit_expense_gear">Edit Gear</string>
+    <string name="edit_expense_other">Edit Other</string>
 
     <!--Expense Activity-->
     <string name="expense_type_food">Food</string>
@@ -29,7 +36,7 @@
     <!--Dialog and Toasts-->
     <string name="please_complete_all_fields">Please complete all required fields</string>
     <string name="submitted_successfully">Submitted successfully</string>
-    <string name="submitted_failure">An unexpected occurred\nPlease try again</string>
+    <string name="submission_failure">An unexpected occurred\nPlease try again</string>
     <string name="delete_all">Delete All</string>
     <string name="delete_all_success_message">Database deleted successfully</string>
     <string name="warning">Warning</string>

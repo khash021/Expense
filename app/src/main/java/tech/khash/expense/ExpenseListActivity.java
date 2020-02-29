@@ -1,5 +1,6 @@
 package tech.khash.expense;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +16,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
 import tech.khash.expense.base.BaseActivity;
+import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DialogUtil;
@@ -72,17 +74,19 @@ public class ExpenseListActivity extends BaseActivity implements ExpenseEntityRe
     public void onExpenseListLongClick(int position) {
         try {
             ExpenseEntity expenseEntity = expenseEntities.get(position);
-            long epoch = expenseEntity.getEpoch();
+            final long epoch = expenseEntity.getEpoch();
             DialogUtil.showExpenseDeleteEditDialog(this, new DialogUtil.ExpenseListDialogListener() {
                 @Override
                 public void onEditSelected() {
-                    //TODO: go to edit
-                    CommonUtil.showToastShort(getApplicationContext(), "Edit");
+                    Intent editIntent = new Intent(ExpenseListActivity.this, AddNewExpenseActivity.class);
+                    editIntent.putExtra(Constants.EDIT_EXPENSE_EXTRA_EPOCH, epoch);
+                    startActivity(editIntent);
                 }
 
                 @Override
                 public void onDeleteSelected() {
-                    DialogUtil.showSingleExpenseDeleteConfirmationDialog(ExpenseListActivity.this, new DialogUtil.DeleteDialogListener() {
+                    DialogUtil.showSingleExpenseDeleteConfirmationDialog(ExpenseListActivity.this,
+                            new DialogUtil.DeleteDialogListener() {
                         @Override
                         public void onDeleteSelected() {
                             //TODO: delete

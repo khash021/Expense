@@ -30,6 +30,8 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     private ImageView imageExpenseType;
     private int currentType = -1;
     private ActionBar actionBar;
+    private boolean isEditMode = false;
+    private ExpenseEntity editEntity;
 
     //TODO: make button and actionbar reactive to be disabled and enabled dynamically
 
@@ -42,6 +44,13 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         if (intent != null && intent.hasExtra(Constants.ADD_NEW_EXPENSE_EXTRA_TYPE)) {
             int type = intent.getIntExtra(Constants.ADD_NEW_EXPENSE_EXTRA_TYPE, -1);
             setExpenseType(type);
+        } else if (intent != null && intent.hasExtra(Constants.EDIT_EXPENSE_EXTRA_EPOCH)) {
+            isEditMode = true;
+            long epoch = intent.getLongExtra(Constants.EDIT_EXPENSE_EXTRA_EPOCH, -1);
+            if (epoch != -1) {
+                editEntity = RealmUtil.getExpenseEntityEpoch(epoch);
+                currentType = editEntity.getType();
+            }
         }
         actionBar = getSupportActionBar();
         if (actionBar != null)
@@ -49,10 +58,13 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
 
         initializeViews();
         setupPage(currentType);
+        if (isEditMode)
+            setupEditMode();
     }
 
     private void initializeViews() {
         imageExpenseType = findViewById(R.id.image_expense_type);
+        imageExpenseType.setOnClickListener(this);
 
         buttonSubmit = findViewById(R.id.button_submit);
         buttonSubmit.setOnClickListener(this);
@@ -97,37 +109,37 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         switch (currentType) {
             case ExpenseEntity.FOOD:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_food);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_food : R.string.edit_expense_food);
                 imageExpenseType.setImageResource(R.drawable.food_header);
                 return;
             case ExpenseEntity.ALCOHOL:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_alcohol);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_alcohol : R.string.edit_expense_alcohol);
                 imageExpenseType.setImageResource(R.drawable.alcohol_header);
                 return;
             case ExpenseEntity.WEED:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_weed);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_weed : R.string.edit_expense_weed);
                 imageExpenseType.setImageResource(R.drawable.weed_header);
                 return;
             case ExpenseEntity.GAS:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_gas);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_gas : R.string.edit_expense_gas);
                 imageExpenseType.setImageResource(R.drawable.gas_header);
                 return;
             case ExpenseEntity.ACCOMMODATION:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_accommodation);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_accommodation : R.string.edit_expense_accommodation);
                 imageExpenseType.setImageResource(R.drawable.accomm_header);
                 return;
             case ExpenseEntity.GEAR:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_gear);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_gear : R.string.edit_expense_gear);
                 imageExpenseType.setImageResource(R.drawable.gear_header);
                 return;
             case ExpenseEntity.OTHER:
                 if (actionBar != null)
-                    actionBar.setTitle(R.string.add_new_expense_other);
+                    actionBar.setTitle(!isEditMode ? R.string.add_new_expense_other : R.string.edit_expense_other);
                 imageExpenseType.setImageResource(R.drawable.other_header);
                 return;
             default:
@@ -136,12 +148,23 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    private void setupEditMode() {
+        int amount = editEntity.getAmount();
+        editAmount.setText(String.valueOf(amount));
+
+        String comment = editEntity.getComment();
+        editComment.setText(comment);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_submit:
                 if (checkFields())
                     submitExpense();
+                break;
+            case R.id.image_expense_type:
+                showSwitchTypeDialog();
                 break;
             default:
                 break;
@@ -202,23 +225,39 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
             return;
         }
 
-        ExpenseEntity expenseEntity = new ExpenseEntity(expenseType, amount, comment);
-        RealmUtil.insertUpdateExpenseToRealm(expenseEntity, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                CommonUtil.showToastShort(AddNewExpenseActivity.this,
-                        getString(R.string.submitted_successfully));
-                setResult(RESULT_OK);
-                hideSoftKeyboard();
-                finish();
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                CommonUtil.showToastShort(AddNewExpenseActivity.this,
-                        getString(R.string.submitted_failure));
-            }
-        });
+        if (!isEditMode) {
+            ExpenseEntity expenseEntity = new ExpenseEntity(expenseType, amount, comment);
+            RealmUtil.insertUpdateExpenseToRealm(expenseEntity, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    CommonUtil.showToastShort(AddNewExpenseActivity.this,
+                            getString(R.string.submitted_successfully));
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    CommonUtil.showToastShort(AddNewExpenseActivity.this,
+                            getString(R.string.submission_failure));
+                }
+            });
+        } else {
+            RealmUtil.updateExpenseEntity(editEntity.getEpoch(), amount, currentType, comment,
+                    new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Intent returnIntent = new Intent(AddNewExpenseActivity.this, MainActivity.class);
+                    startActivity(returnIntent);
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    CommonUtil.showToastShort(AddNewExpenseActivity.this,
+                            getString(R.string.submission_failure));
+                }
+            });
+        }
     }
 
     private void setExpenseType(int type) {

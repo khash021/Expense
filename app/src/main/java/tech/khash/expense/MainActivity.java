@@ -516,7 +516,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onError(Throwable error) {
                 CommonUtil.showToastShort(MainActivity.this,
-                        getApplicationContext().getString(R.string.submitted_failure));
+                        getApplicationContext().getString(R.string.submission_failure));
             }
         });
     }

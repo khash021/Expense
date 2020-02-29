@@ -41,4 +41,10 @@ public class BaseActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
         }
     }
+
+    @Override
+    public void finish() {
+        hideSoftKeyboard();
+        super.finish();
+    }
 }
