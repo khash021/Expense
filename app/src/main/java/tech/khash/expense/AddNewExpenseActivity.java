@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
+import java.util.HashMap;
+
 import io.realm.Realm;
 import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.Constants;
@@ -32,6 +34,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     private ActionBar actionBar;
     private boolean isEditMode = false;
     private ExpenseEntity editEntity;
+    private HashMap<String, Object> initialValuesMap;
 
     //TODO: make button and actionbar reactive to be disabled and enabled dynamically
 
@@ -58,8 +61,11 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
 
         initializeViews();
         setupPage(currentType);
+
         if (isEditMode)
             setupEditMode();
+        else
+            saveInitialValues();
     }
 
     private void initializeViews() {
@@ -154,6 +160,25 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
 
         String comment = editEntity.getComment();
         editComment.setText(comment);
+
+        saveInitialValues();
+    }
+
+    private void saveInitialValues() {
+        if (initialValuesMap != null)
+            return;
+        initialValuesMap = new HashMap<>();
+        initialValuesMap.put(Constants.INITIAL_VALUES_TYPE, currentType);
+        initialValuesMap.put(Constants.INITIAL_VALUES_COMMENT, editComment.getText().toString());
+
+        String amountStr = editAmount.getText().toString();
+        int amount;
+        if (TextUtils.isEmpty(amountStr))
+            amount = -1;
+        else
+            amount = Integer.valueOf(amountStr);
+
+        initialValuesMap.put(Constants.INITIAL_VALUES_AMOUNT, amount);
     }
 
     @Override
@@ -186,9 +211,48 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
                 return true;
             case R.id.action_switch_type:
                 showSwitchTypeDialog();
+                return true;
+            case android.R.id.home:
+                exitWithConfirmation();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void exitWithConfirmation() {
+        if (!hasUnsavedChanged())
+            finish();
+        else
+            showExitConfirmationDialog();
+    }
+
+    private boolean hasUnsavedChanged() {
+        if (initialValuesMap == null)
+            return false;
+        String amountStr = editAmount.getText().toString();
+        int currentAmount;
+        if (TextUtils.isEmpty(amountStr))
+            currentAmount = -1;
+        else
+            currentAmount = Integer.valueOf(amountStr);
+
+        String currentComment = editComment.getText().toString();
+
+        int prevAmount = (int) initialValuesMap.get(Constants.INITIAL_VALUES_AMOUNT);
+        String prevComment = (String) initialValuesMap.get(Constants.INITIAL_VALUES_COMMENT);
+        int prevType = (int) initialValuesMap.get(Constants.INITIAL_VALUES_TYPE);
+
+        if (prevAmount != currentAmount)
+            return true;
+
+        if (prevType != currentType)
+            return true;
+
+        if (!prevComment.equalsIgnoreCase(currentComment))
+            return true;
+
+        return false;
     }
 
     private void showSwitchTypeDialog() {
@@ -345,6 +409,22 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         editAmount.requestFocus();
         showSoftKeyboard();
         setupPage(currentType);
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitWithConfirmation();
+    }
+
+
+
+    private void showExitConfirmationDialog() {
+        DialogUtil.showUnsavedChangesDialog(this, new DialogUtil.UnsavedChangesDialogListener() {
+            @Override
+            public void onDiscard() {
+                finish();
+            }
+        });
     }
 
     @Override

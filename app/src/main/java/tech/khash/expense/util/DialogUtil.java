@@ -179,4 +179,27 @@ public class DialogUtil {
         }
     }
 
+    public static void showUnsavedChangesDialog(@NonNull Context context, @NonNull final UnsavedChangesDialogListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(R.string.unsaved_changes_message);
+        builder.setPositiveButton(R.string.unsaved_changes_discard, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                listener.onDiscard();
+            }
+        });
+        builder.setNegativeButton(R.string.unsaved_changes_keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    public interface UnsavedChangesDialogListener {
+        void onDiscard();
+    }
+
 }

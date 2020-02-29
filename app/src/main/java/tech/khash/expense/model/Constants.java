@@ -22,6 +22,10 @@ public class Constants {
     public static final String OTHER = "Other";
     public static final String GEAR = "Gear";
 
+    public static final String INITIAL_VALUES_TYPE = "initial-values_type";
+    public static final String INITIAL_VALUES_AMOUNT = "initial-values_amount";
+    public static final String INITIAL_VALUES_COMMENT = "initial-values_comment";
+
     public static final class REALM {
         public static int REALM_VERSION = 2;
     }

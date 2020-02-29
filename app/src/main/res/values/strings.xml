@@ -43,6 +43,10 @@
     <string name="delete_all_message">Are you sure you want to delete the entire database?</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="unsaved_changes_title">Unsaved Changes</string>
+    <string name="unsaved_changes_message">Would you like to discard your unsaved changes?</string>
+    <string name="unsaved_changes_discard">Discard</string>
+    <string name="unsaved_changes_keep_editing">Keep Editing</string>
 
     <string name="delete_single_message">Are you sure you want to delete this expense?</string>
 
