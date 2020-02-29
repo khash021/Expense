@@ -27,6 +27,14 @@
             app:defaultValue="350"
             />
 
+        <EditTextPreference
+            app:key="@string/settings_weekly_allowance_key"
+            app:title="@string/weekly_allowance"
+            app:useSimpleSummaryProvider="true"
+            android:inputType="number"
+            app:defaultValue="350"
+            />
+
     </PreferenceCategory>
 
 

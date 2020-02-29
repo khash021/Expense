@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private SpeedDialView fab;
     private TextView weekTitleText, foodText, alcoholText, weedText, gasText, accommText, gearText,
-            otherText, totalText, toolbarText, remainingText;
+            otherText, totalText, toolbarText, remainingText, allowanceText;
     private LinearLayout foodContainer, alcoholContainer, weedContainer, gasContainer,
             accommContainer, gearContainer, otherContainer;
     private View overlayView;
@@ -53,8 +53,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private boolean isReportMenu = false;
     private HashMap<String, AmountEntity> amountEntityHashMap;
 
-    //TODO: move this to shared pref
-    private int weeklyBudget;
+    private int weeklyBudget, weeklyAllowance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +96,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         totalText = findViewById(R.id.text_total);
         toolbarText = findViewById(R.id.text_toolbar_report_title);
         remainingText = findViewById(R.id.text_remaining);
+        allowanceText = findViewById(R.id.text_allowance);
 
         foodContainer = findViewById(R.id.container_food);
         alcoholContainer = findViewById(R.id.container_alcohol);
@@ -264,11 +264,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         int total = thisWeekAmountEntity.getTotal();
         totalText.setText(String.valueOf(total));
 
-        int remaining = thisWeekAmountEntity.getRemaining(weeklyBudget);
-        showWeeklyRemaining(remaining);
+        showWeeklyRemaining(thisWeekAmountEntity);
 
-        int percentTotal = getPercentTotal(total);
-        updateProgressBar(percentTotal);
+        updateProgressBar(total);
     }
 
     private void showLastWeekReport() {
@@ -339,14 +337,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         int total = lastWeekAmountEntity.getTotal();
         totalText.setText(String.valueOf(total));
 
-        int remaining = lastWeekAmountEntity.getRemaining(weeklyBudget);
-        showWeeklyRemaining(remaining);
+        showWeeklyRemaining(lastWeekAmountEntity);
 
-        int percentTotal = getPercentTotal(total);
-        updateProgressBar(percentTotal);
+        updateProgressBar(total);
     }
 
-    private void updateProgressBar(int percentTotal) {
+    private void updateProgressBar(int total) {
+        int percentTotal = getPercentTotal(total);
         progressBarBudget.setProgressDrawable(ContextCompat.getDrawable(this,
                 R.drawable.progress_bar));
         if (percentTotal < 100) {
@@ -370,16 +367,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             return percInt;
     }
 
-    private void showWeeklyRemaining(@NonNull int remaining) {
+    private void showWeeklyRemaining(@NonNull AmountEntity entity) {
+        int remaining = entity.getBudgetRemaining(this);
+        updateTextViewWithColor(remainingText, remaining);
+
+        int allowance = entity.getAllowanceRemaining(this);
+        updateTextViewWithColor(allowanceText, allowance);
+    }
+
+    private void updateTextViewWithColor(@NonNull TextView textView, @NonNull int remaining) {
         if (remaining < 0) {
-            remainingText.setText("- " + remaining);
-            remainingText.setTextColor(getColor(R.color.red));
+            textView.setText("- " + remaining);
+            textView.setTextColor(getColor(R.color.red));
         } else if (remaining > 0) {
-            remainingText.setText("+ " + remaining);
-            remainingText.setTextColor(getColor(R.color.colorAccentTertiary));
+            textView.setText("+ " + remaining);
+            textView.setTextColor(getColor(R.color.colorAccentTertiary));
         } else {
-            remainingText.setText(String.valueOf(remaining));
-            remainingText.setTextColor(getColor(R.color.colorAccentQuinary));
+            textView.setText(String.valueOf(remaining));
+            textView.setTextColor(getColor(R.color.colorAccentQuinary));
         }
     }
 
@@ -552,5 +557,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private void updateWeeklyLimit() {
         weeklyBudget = SharedPreferencesUtil.getWeeklyBudget(this);
+        weeklyAllowance = SharedPreferencesUtil.getWeeklyAllowance(this);
     }
 }

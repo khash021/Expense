@@ -1,6 +1,5 @@
 package tech.khash.expense;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
@@ -32,30 +31,21 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            EditTextPreference weeklyPref = getPreferenceManager().findPreference(getString(R.string.settings_weekly_budget_key));
-            weeklyPref.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+            EditTextPreference weekBudgetPref = getPreferenceManager().findPreference(getString(R.string.settings_weekly_budget_key));
+            weekBudgetPref.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
                 @Override
                 public void onBindEditText(@NonNull EditText editText) {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 }
             });
-        }
-    }
 
-    public class IntEditTextPreference extends EditTextPreference {
-
-        public IntEditTextPreference(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected String getPersistedString(String defaultReturnValue) {
-            return String.valueOf(getPersistedInt(-1));
-        }
-
-        @Override
-        protected boolean persistString(String value) {
-            return persistInt(Integer.valueOf(value));
+            EditTextPreference weekAllowancePref = getPreferenceManager().findPreference(getString(R.string.settings_weekly_allowance_key));
+            weekAllowancePref.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                @Override
+                public void onBindEditText(@NonNull EditText editText) {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            });
         }
     }
 }

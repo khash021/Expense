@@ -81,7 +81,10 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="budget">Budget</string>
     <string name="weekly_budget">Weekly budget</string>
-    <string name="settings_weekly_budget_key">settings_weekly_budget</string>
+    <string name="weekly_allowance">Weekly allowance</string>
+
+    <string name="settings_weekly_budget_key" translatable="false">settings_weekly_budget</string>
+    <string name="settings_weekly_allowance_key" translatable="false">settings_weekly_allowance_key</string>
 
 
 </resources>

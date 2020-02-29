@@ -1,10 +1,13 @@
 package tech.khash.expense.model;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
 import tech.khash.expense.util.CommonUtil;
+import tech.khash.expense.util.SharedPreferencesUtil;
 
 public class AmountEntity {
 
@@ -131,8 +134,14 @@ public class AmountEntity {
         return total;
     }
 
-    public int getRemaining(@NonNull int weeklyBudget) {
+    public int getBudgetRemaining(@NonNull Context context) {
+        int weeklyBudget = SharedPreferencesUtil.getWeeklyBudget(context);
         return weeklyBudget - total;
+    }
+
+    public int getAllowanceRemaining(@NonNull Context context) {
+        int weeklyAllowance = SharedPreferencesUtil.getWeeklyAllowance(context);
+        return weeklyAllowance - total;
     }
 
     public Integer getWeek() {
