@@ -9,17 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
 import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DialogUtil;
+import tech.khash.expense.util.RealmUtil;
 
 public class ExpenseListActivity extends BaseActivity implements ExpenseEntityRecyclerAdapter.ListClickListener {
 
@@ -35,10 +32,7 @@ public class ExpenseListActivity extends BaseActivity implements ExpenseEntityRe
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        getExpenseEntities();
-
-        //reverse list so the newest is at top
-        Collections.reverse(expenseEntities);
+        expenseEntities = RealmUtil.getAllExpensesDescending();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapter = new ExpenseEntityRecyclerAdapter(this,
@@ -49,14 +43,6 @@ public class ExpenseListActivity extends BaseActivity implements ExpenseEntityRe
                 DividerItemDecoration.VERTICAL);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(decoration);
-    }
-
-    private void getExpenseEntities() {
-        expenseEntities = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
-        RealmResults<ExpenseEntity> results = query.findAll();
-        expenseEntities.addAll(results);
     }
 
     @Override

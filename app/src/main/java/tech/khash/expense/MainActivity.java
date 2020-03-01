@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 import io.realm.Realm;
 import tech.khash.expense.base.BaseActivity;
-import tech.khash.expense.model.AmountEntity;
+import tech.khash.expense.model.WeekEntity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.CommonUtil;
@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private ProgressBar progressBarBudget, progressBarLoading;
     private ConstraintLayout mainLayout;
     private boolean isReportMenu = false;
-    private HashMap<String, AmountEntity> amountEntityHashMap;
+    private HashMap<String, WeekEntity> amountEntityHashMap;
 
     private int weeklyBudget, weeklyAllowance;
 
@@ -65,14 +65,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         initViews();
         setupFab();
         updateWeeklyLimit();
-        updateView();
+        updateViews();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateWeeklyLimit();
-        updateView();
+        updateViews();
     }
 
     private void initViews() {
@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         });
     }
 
-    private void updateView() {
+    private void updateViews() {
         progressBarLoading.setVisibility(View.VISIBLE);
         clearReportTexts();
         if (CommonUtil.isHashMapEmpty(amountEntityHashMap))
@@ -199,7 +199,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void showThisWeekData() {
-        AmountEntity thisWeekAmountEntity;
+        WeekEntity thisWeekAmountEntity;
         if (amountEntityHashMap.containsKey(Constants.THIS_WEEK_EXPENSE_KEY)) {
             thisWeekAmountEntity = amountEntityHashMap.get(Constants.THIS_WEEK_EXPENSE_KEY);
         } else {
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             int thisWeek = DateTimeUtil.getWeekOfTheYear();
             String mondayStr = DateTimeUtil.getMondayDateTimeStr();
 
-            thisWeekAmountEntity = new AmountEntity(expenseEntities, thisWeek, mondayStr);
+            thisWeekAmountEntity = new WeekEntity(expenseEntities, thisWeek, mondayStr);
             if (thisWeekAmountEntity == null)
                 return;
             else
@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void showLastWeekReport() {
-        AmountEntity lastWeekAmountEntity;
+        WeekEntity lastWeekAmountEntity;
         if (amountEntityHashMap.containsKey(Constants.LAST_WEEK_EXPENSE_KEY)) {
             lastWeekAmountEntity = amountEntityHashMap.get(Constants.LAST_WEEK_EXPENSE_KEY);
         } else {
@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             DateTime mondayDateTime = new DateTime(epoch);
             String mondayStr = DateTimeUtil.getMondayDateTimeStr(mondayDateTime);
 
-            lastWeekAmountEntity = new AmountEntity(expenseEntities, lastWeek, mondayStr);
+            lastWeekAmountEntity = new WeekEntity(expenseEntities, lastWeek, mondayStr);
             if (lastWeekAmountEntity == null)
                 return;
             else
@@ -367,7 +367,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             return percInt;
     }
 
-    private void showWeeklyRemaining(@NonNull AmountEntity entity) {
+    private void showWeeklyRemaining(@NonNull WeekEntity entity) {
         int remaining = entity.getBudgetRemaining(this);
         updateTextViewWithColor(remainingText, remaining);
 
@@ -411,9 +411,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(settingsIntent, Constants.REQUEST_CODE_SETTINMGS);
                 return true;
-            case R.id.action_list:
+            case R.id.action_expense_list:
                 Intent listIntent = new Intent(MainActivity.this, ExpenseListActivity.class);
                 startActivity(listIntent);
+                return true;
+            case R.id.action_week_list:
+                Intent weekIntent = new Intent(MainActivity.this, WeekListActivity.class);
+                startActivity(weekIntent);
                 return true;
             case R.id.action_delete_all:
                 showDeleteConfirmationDialog();
@@ -425,7 +429,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             case R.id.action_report_last_week:
                 isReportMenu = true;
                 invalidateOptionsMenu();
-                updateView();
+                updateViews();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -453,7 +457,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private void closeReportView() {
         isReportMenu = false;
         invalidateOptionsMenu();
-        updateView();
+        updateViews();
     }
 
     @Override
@@ -492,10 +496,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         if (requestCode == Constants.REQUEST_CODE_ADD_NEW_EXPENSE && resultCode == RESULT_OK) {
             if (amountEntityHashMap.containsKey(Constants.THIS_WEEK_EXPENSE_KEY))
                 amountEntityHashMap.remove(Constants.THIS_WEEK_EXPENSE_KEY);
-            updateView();
+            updateViews();
         } else if (requestCode == Constants.REQUEST_CODE_SETTINMGS) {
             updateWeeklyLimit();
-            updateView();
+            updateViews();
         }
     }
 
@@ -510,7 +514,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             public void onSuccess() {
                 CommonUtil.showToastShort(MainActivity.this,
                         getApplicationContext().getString(R.string.delete_all_success_message));
-                updateView();
+                updateViews();
             }
         }, new Realm.Transaction.OnError() {
             @Override

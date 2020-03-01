@@ -18,6 +18,7 @@
     <string name="edit_expense_accommodation">Edit Accommodation</string>
     <string name="edit_expense_gear">Edit Gear</string>
     <string name="edit_expense_other">Edit Other</string>
+    <string name="week_list_title">Week\'s lists</string>
 
     <!--Expense Activity-->
     <string name="expense_type_food">Food</string>

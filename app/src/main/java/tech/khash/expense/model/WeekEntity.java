@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.SharedPreferencesUtil;
 
-public class AmountEntity {
+public class WeekEntity {
+
+    //TODO: consider making this into weekEntity - rename
 
     private int food, alcohol, weed, gas, accommodation, other, gear;
     private int total;
@@ -18,7 +20,9 @@ public class AmountEntity {
     private ArrayList<ExpenseEntity> expenses;
     //TODO: add different constructors for various periods
 
-    public AmountEntity(@NonNull ArrayList<ExpenseEntity> expenses) {
+    public WeekEntity(){}
+
+    public WeekEntity(@NonNull ArrayList<ExpenseEntity> expenses) {
         this.expenses = expenses;
 
         food = 0;
@@ -59,7 +63,7 @@ public class AmountEntity {
         total = food + alcohol + weed + gas + accommodation + other + gear;
     }
 
-    public AmountEntity(@NonNull ArrayList<ExpenseEntity> expenses, int week, String monday) {
+    public WeekEntity(@NonNull ArrayList<ExpenseEntity> expenses, int week, String monday) {
         this.expenses = expenses;
         this.week = week;
         mondayStr = monday;

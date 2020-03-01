@@ -13,7 +13,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.util.ArrayList;
 
 import tech.khash.expense.base.BaseActivity;
-import tech.khash.expense.model.AmountEntity;
+import tech.khash.expense.model.WeekEntity;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.util.RealmUtil;
 
@@ -31,7 +31,7 @@ public class ChartActivity extends BaseActivity {
         PieChart chart = findViewById(R.id.chart);
 
         ArrayList<ExpenseEntity> expenseEntities = RealmUtil.getThisWeekExpensesAll();
-        AmountEntity amountEntity = new AmountEntity(expenseEntities);
+        WeekEntity amountEntity = new WeekEntity(expenseEntities);
         ArrayList<PieEntry> entries = new ArrayList<>();
 
 //        PieEntry foodEntry = new PieEntry(amountEntity.getFood(),

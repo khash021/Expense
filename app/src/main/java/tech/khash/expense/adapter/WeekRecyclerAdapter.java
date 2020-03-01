@@ -14,15 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import tech.khash.expense.R;
-import tech.khash.expense.model.AmountEntity;
+import tech.khash.expense.model.WeekEntity;
 import tech.khash.expense.util.CommonUtil;
 
 public class WeekRecyclerAdapter extends RecyclerView.Adapter<WeekRecyclerAdapter.WeekViewHolder>{
 
-    private ArrayList<AmountEntity> weeks;
+    private ArrayList<WeekEntity> weeks;
     private LayoutInflater inflater;
 
-    public WeekRecyclerAdapter(Context context, ArrayList<AmountEntity> weeks) {
+    public WeekRecyclerAdapter(Context context, ArrayList<WeekEntity> weeks) {
         inflater =  LayoutInflater.from(context);
         this.weeks = weeks;
     }
@@ -35,7 +35,7 @@ public class WeekRecyclerAdapter extends RecyclerView.Adapter<WeekRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull WeekRecyclerAdapter.WeekViewHolder holder, int position) {
-        AmountEntity week = weeks.get(position);
+        WeekEntity week = weeks.get(position);
 
 
 

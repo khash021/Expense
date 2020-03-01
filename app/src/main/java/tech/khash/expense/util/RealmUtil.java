@@ -15,6 +15,7 @@ import io.realm.RealmObjectSchema;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.RealmSchema;
+import io.realm.Sort;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 
@@ -348,6 +349,52 @@ public class RealmUtil {
         expenses.addAll(results);
 
         return expenses;
+    }
+
+    public static ArrayList<ExpenseEntity> getAllExpensesAscending() {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.ASCENDING);
+        RealmResults<ExpenseEntity> results = query.findAll();
+
+        ArrayList<ExpenseEntity> expenses = new ArrayList<>();
+        expenses.addAll(results);
+
+        return expenses;
+    }
+
+    public static ArrayList<ExpenseEntity> getAllExpensesDescending() {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
+        RealmResults<ExpenseEntity> results = query.findAll();
+
+        ArrayList<ExpenseEntity> expenses = new ArrayList<>();
+        expenses.addAll(results);
+
+        return expenses;
+    }
+
+    public static int getFirstWeekCountInt() {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.ASCENDING);
+        query.limit(1);
+        RealmResults<ExpenseEntity> results = query.findAll();
+        return results.get(0).getWeekOfTheYear();
+    }
+
+    public static int getLastWeekCountInt() {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
+        query.limit(1);
+        RealmResults<ExpenseEntity> results = query.findAll();
+        return results.get(0).getWeekOfTheYear();
     }
 
     public interface RealmSuccessListener {

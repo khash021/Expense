@@ -41,6 +41,10 @@
             android:name=".ChartActivity"
             android:label="@string/chart"
             android:parentActivityName=".MainActivity" />
+
+        <activity android:name=".WeekListActivity"
+            android:label="@string/week_list_title"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
