@@ -17,6 +17,7 @@ import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import tech.khash.expense.R;
 import tech.khash.expense.model.ExpenseEntity;
@@ -58,6 +59,8 @@ public class WeekFragment extends Fragment {
 
     private void showDetailedReport() {
         ArrayList<ExpenseEntity> expenseEntities = RealmUtil.getWeekExpensesAll(week.getWeek());
+        //we want to show the week expense report in ascending order (from Monday to Sunday)
+        Collections.reverse(expenseEntities);
         DialogUtil.ExpenseListDialog dialog = new DialogUtil.ExpenseListDialog(context, expenseEntities);
         dialog.show(getFragmentManager(), "Expense List Dialog");
     }

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -194,8 +193,14 @@ public class DialogUtil {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            LinearLayout view = (LinearLayout) View
+            ConstraintLayout view = (ConstraintLayout) View
                     .inflate(context, R.layout.dialog_list_expense_entity, null);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
 
             ImageButton cancelButton = view.findViewById(R.id.alert_dialog_expense_list_cancel_button);
             cancelButton.setOnClickListener(new View.OnClickListener() {

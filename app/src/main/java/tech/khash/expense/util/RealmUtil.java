@@ -19,6 +19,13 @@ import io.realm.Sort;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 
+/**
+ * Created by Khash - Feb.2020
+ *
+ * NOTE: By default all of the query methods return Descending order lists (newest item at the top)
+ *       unless order specifically stated in the name of the method.
+ */
+
 public class RealmUtil {
 
     public static void setDefaultRealmConfiguration() {
