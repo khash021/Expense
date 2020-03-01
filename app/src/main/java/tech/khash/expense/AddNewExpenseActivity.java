@@ -416,8 +416,6 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         exitWithConfirmation();
     }
 
-
-
     private void showExitConfirmationDialog() {
         DialogUtil.showUnsavedChangesDialog(this, new DialogUtil.UnsavedChangesDialogListener() {
             @Override

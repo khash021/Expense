@@ -79,13 +79,11 @@ public class DialogUtil {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public interface DeleteDialogListener {
         void onDeleteSelected();
 
         void onCancelSelected();
     }
-
 
     public static class ShowDeleteDatabaseConfirmationDialog extends AlertDialog {
         private Context context;
