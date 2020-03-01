@@ -16,9 +16,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
 import tech.khash.expense.R;
+import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.model.WeekEntity;
-import tech.khash.expense.util.CommonUtil;
+import tech.khash.expense.util.DialogUtil;
+import tech.khash.expense.util.RealmUtil;
 import tech.khash.expense.util.SharedPreferencesUtil;
 
 public class WeekFragment extends Fragment {
@@ -46,10 +50,16 @@ public class WeekFragment extends Fragment {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonUtil.showToastShort(context, String.valueOf(week.getWeek()));
+                showDetailedReport();
             }
         });
         return v;
+    }
+
+    private void showDetailedReport() {
+        ArrayList<ExpenseEntity> expenseEntities = RealmUtil.getWeekExpensesAll(week.getWeek());
+        DialogUtil.ExpenseListDialog dialog = new DialogUtil.ExpenseListDialog(context, expenseEntities);
+        dialog.show(getFragmentManager(), "Expense List Dialog");
     }
 
     private void initializeUpdateViews() {

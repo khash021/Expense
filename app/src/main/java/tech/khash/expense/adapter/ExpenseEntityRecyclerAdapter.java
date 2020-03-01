@@ -115,13 +115,15 @@ public class ExpenseEntityRecyclerAdapter extends RecyclerView.Adapter<ExpenseEn
         @Override
         public void onClick(View v) {
             int position = getLayoutPosition();
-            listClickListener.onExpenseListClick(position);
+            if (listClickListener != null)
+                listClickListener.onExpenseListClick(position);
         }
 
         @Override
         public boolean onLongClick(View v) {
             int position = getLayoutPosition();
-            listClickListener.onExpenseListLongClick(position);
+            if (listClickListener != null)
+                listClickListener.onExpenseListLongClick(position);
             return true;
         }
     }

@@ -181,6 +181,7 @@ public class RealmUtil {
 
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.EPOCH, epoch);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         RealmResults<ExpenseEntity> results = query.findAll();
         if (CommonUtil.isEmptyList(results))
             return null;
@@ -195,6 +196,7 @@ public class RealmUtil {
 
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         RealmResults<ExpenseEntity> results = query.findAll();
 
         ArrayList<ExpenseEntity> expenses = new ArrayList<>();
@@ -209,6 +211,7 @@ public class RealmUtil {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -222,6 +225,7 @@ public class RealmUtil {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         RealmResults<ExpenseEntity> results = query.findAll();
 
         ArrayList<ExpenseEntity> expenses = new ArrayList<>();
@@ -234,6 +238,7 @@ public class RealmUtil {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.WEEK_OF_THE_YEAR, week);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -249,6 +254,7 @@ public class RealmUtil {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         RealmResults<ExpenseEntity> results = query.findAll();
 
         ArrayList<ExpenseEntity> expenses = new ArrayList<>();
@@ -263,6 +269,7 @@ public class RealmUtil {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -275,6 +282,7 @@ public class RealmUtil {
     public static ArrayList<ExpenseEntity> getMonthExpensesAll(@NonNull int month) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -287,6 +295,7 @@ public class RealmUtil {
     public static ArrayList<ExpenseEntity> getMonthExpensesTyped(@NonNull int month, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.MONTH_OF_THE_YEAR, month);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();
@@ -302,6 +311,7 @@ public class RealmUtil {
 
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.YEAR, year);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -316,6 +326,7 @@ public class RealmUtil {
 
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.YEAR, year);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();
@@ -329,6 +340,7 @@ public class RealmUtil {
     public static ArrayList<ExpenseEntity> getYearExpensesAll(@NonNull int year) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.YEAR, year);
         RealmResults<ExpenseEntity> results = query.findAll();
 
@@ -341,6 +353,7 @@ public class RealmUtil {
     public static ArrayList<ExpenseEntity> getYearExpensesTyped(@NonNull int year, @NonNull @ExpenseEntity.ExpenseTypeInt int type) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ExpenseEntity> query = realm.where(ExpenseEntity.class);
+        query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.equalTo(ExpenseEntity.YEAR, year);
         query.equalTo(ExpenseEntity.TYPE, type);
         RealmResults<ExpenseEntity> results = query.findAll();

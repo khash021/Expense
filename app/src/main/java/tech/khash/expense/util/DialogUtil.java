@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import tech.khash.expense.R;
+import tech.khash.expense.adapter.ExpenseEntityRecyclerAdapter;
 import tech.khash.expense.adapter.ExpenseTypeAdapter;
 import tech.khash.expense.model.ExpenseEntity;
 
@@ -79,6 +83,7 @@ public class DialogUtil {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     public interface DeleteDialogListener {
         void onDeleteSelected();
 
@@ -138,7 +143,7 @@ public class DialogUtil {
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             ConstraintLayout view = (ConstraintLayout) View
-                    .inflate(context, R.layout.dialog_expense_list, null);
+                    .inflate(context, R.layout.dialog_list_expense_type, null);
 
             ImageButton cancelButton = view.findViewById(R.id.alert_dialog_expense_type_cancel_button);
             cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +163,7 @@ public class DialogUtil {
             recyclerView.setAdapter(adapter);
             recyclerView.addItemDecoration(decoration);
 
-            return new android.app.AlertDialog.Builder(getActivity()).setView(
-                    view).create();
+            return new AlertDialog.Builder(getActivity()).setView(view).create();
         }
 
         @Override
@@ -174,6 +178,45 @@ public class DialogUtil {
             void onDismiss();
 
             void onExpenseSelected(int expenseType);
+        }
+    }
+
+
+    public static class ExpenseListDialog extends DialogFragment {
+        private Context context;
+        private ArrayList<ExpenseEntity> expenses;
+
+        public ExpenseListDialog(@NonNull Context context, @NonNull ArrayList<ExpenseEntity> expenses) {
+            this.context = context;
+            this.expenses = expenses;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+            LinearLayout view = (LinearLayout) View
+                    .inflate(context, R.layout.dialog_list_expense_entity, null);
+
+            ImageButton cancelButton = view.findViewById(R.id.alert_dialog_expense_list_cancel_button);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+            RecyclerView recyclerView = view.findViewById(R.id.alert_dialog_expense_list_recycler_view);
+
+            ExpenseEntityRecyclerAdapter adapter = new ExpenseEntityRecyclerAdapter(context, expenses, null);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL,
+                    false));
+            DividerItemDecoration decoration = new DividerItemDecoration(recyclerView.getContext(),
+                    DividerItemDecoration.VERTICAL);
+            recyclerView.setAdapter(adapter);
+            recyclerView.addItemDecoration(decoration);
+
+            return new AlertDialog.Builder(getActivity()).setView(view).create();
         }
     }
 
