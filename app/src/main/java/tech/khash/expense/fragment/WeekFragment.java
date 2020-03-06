@@ -153,7 +153,7 @@ public class WeekFragment extends Fragment {
 
     private void updateTextViewWithColor(@NonNull TextView textView, @NonNull int remaining) {
         if (remaining < 0) {
-            textView.setText("- " + remaining);
+            textView.setText(String.valueOf(remaining));
             textView.setTextColor(context.getColor(R.color.red));
         } else if (remaining > 0) {
             textView.setText("+ " + remaining);

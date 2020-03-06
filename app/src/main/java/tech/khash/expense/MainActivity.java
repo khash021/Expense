@@ -377,7 +377,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
     private void updateTextViewWithColor(@NonNull TextView textView, @NonNull int remaining) {
         if (remaining < 0) {
-            textView.setText("- " + remaining);
+            textView.setText(String.valueOf(remaining));
             textView.setTextColor(getColor(R.color.red));
         } else if (remaining > 0) {
             textView.setText("+ " + remaining);
