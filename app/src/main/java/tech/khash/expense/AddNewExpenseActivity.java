@@ -161,6 +161,8 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         String comment = editEntity.getComment();
         editComment.setText(comment);
 
+        selectEditTextEnd(editAmount);
+
         saveInitialValues();
     }
 

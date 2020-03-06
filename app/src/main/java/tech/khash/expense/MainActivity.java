@@ -1,6 +1,11 @@
 package tech.khash.expense;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.Menu;
@@ -24,13 +29,14 @@ import com.leinardi.android.speeddial.SpeedDialView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import io.realm.Realm;
 import tech.khash.expense.base.BaseActivity;
-import tech.khash.expense.model.WeekEntity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
+import tech.khash.expense.model.WeekEntity;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DateTimeUtil;
 import tech.khash.expense.util.DialogUtil;
@@ -62,10 +68,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        addShortcut();
         initViews();
         setupFab();
         updateWeeklyLimit();
         updateViews();
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private void addShortcut() {
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+        Intent intent = new Intent(getApplicationContext(), AddNewExpenseActivity.class);
+        intent.setAction("tech.khash.expense.addNewExpense");
+        ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "add_expense_shortcut")
+                .setShortLabel(getString(R.string.add_expense))
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_add_white))
+                .setIntent(intent)
+                .build();
+
+        shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
     }
 
     @Override
