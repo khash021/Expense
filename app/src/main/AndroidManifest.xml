@@ -13,7 +13,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tech.khash.expense.MainActivity" />
@@ -21,10 +22,12 @@
         <activity
             android:name=".ExpenseListActivity"
             android:label="@string/expense_list"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,15 +39,19 @@
         <activity
             android:name=".AddNewExpenseActivity"
             android:label="@string/add_new_expense"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ChartActivity"
             android:label="@string/chart"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".WeekListActivity"
+        <activity
+            android:name=".WeekListActivity"
             android:label="@string/week_list_title"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
