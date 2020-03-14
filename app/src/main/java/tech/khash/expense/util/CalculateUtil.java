@@ -110,6 +110,18 @@ public class CalculateUtil {
         return total;
     }
 
+    public static int getWeeksTotal(@NonNull int[] weeks) {
+        ArrayList<ExpenseEntity> expenses = new ArrayList<>();
+        for (int i = 0; i < weeks.length; i++) {
+            expenses.addAll(RealmUtil.getWeekExpensesAll(weeks[i]));
+        }
+        int total = 0;
+        for (ExpenseEntity expenseEntity : expenses) {
+            total += expenseEntity.getAmount();
+        }
+        return total;
+    }
+
     /*
         ------------------------ Year -----------------------------------------
     */

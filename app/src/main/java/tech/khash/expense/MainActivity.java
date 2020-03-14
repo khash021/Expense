@@ -4,10 +4,16 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +43,7 @@ import tech.khash.expense.base.BaseActivity;
 import tech.khash.expense.model.Constants;
 import tech.khash.expense.model.ExpenseEntity;
 import tech.khash.expense.model.WeekEntity;
+import tech.khash.expense.util.CalculateUtil;
 import tech.khash.expense.util.CommonUtil;
 import tech.khash.expense.util.DateTimeUtil;
 import tech.khash.expense.util.DialogUtil;
@@ -289,6 +296,70 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         showWeeklyRemaining(thisWeekAmountEntity);
 
         updateProgressBar(total);
+
+        showTotalSavings();
+    }
+
+    private void showTotalSavings() {
+        int firstMonth = RealmUtil.getFirstWeekCountInt();
+        int lastMonth = RealmUtil.getLastWeekCountInt();
+        int[] months = createMonthsArray(firstMonth, lastMonth);
+
+        int total = 0;
+        if (months != null && months.length > 0) {
+            total = CalculateUtil.getWeeksTotal(months);
+        }
+
+        if (total <=0)
+            return;
+
+        int totalAllowance = SharedPreferencesUtil.getWeeklyAllowance(this) * months.length;
+        int totalSavings = totalAllowance - total;
+
+        String savingsStr;
+        if (totalSavings > 0) {
+            savingsStr = "+ " + CommonUtil.getCommaSeparatedIntStr(totalSavings);
+        } else if (totalSavings < 0) {
+            savingsStr = "- " + CommonUtil.getCommaSeparatedIntStr(totalSavings);
+        } else {
+            savingsStr = CommonUtil.getCommaSeparatedIntStr(totalSavings);
+        }
+
+        String text = getString(R.string.saving, savingsStr);
+        SpannableString spannableString = new SpannableString(text);
+        int index = text.indexOf(":");
+        spannableString.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), index + 1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new AbsoluteSizeSpan(20, true), index + 1, text.length(), 0);
+        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+        spannableString.setSpan(boldSpan, index + 1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        if (totalSavings > 0) {
+            spannableString.setSpan(new ForegroundColorSpan(this.getColor(R.color.colorAccentTertiary)),
+                    index + 1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (totalSavings < 0) {
+            spannableString.setSpan(new ForegroundColorSpan(this.getColor(R.color.red)),
+                    index + 1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            spannableString.setSpan(new ForegroundColorSpan(this.getColor(R.color.colorAccentQuinary)),
+                    index + 1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+
+        TextView totalSavingsText = findViewById(R.id.container_admin_budget);
+        totalSavingsText.setVisibility(View.VISIBLE);
+        totalSavingsText.setText(spannableString);
+
+    }
+
+    private int[] createMonthsArray(int firstMonth, int lastMonth) {
+        int size = lastMonth - firstMonth + 1;
+        int[] results = new int[size];
+        for (int i = 0; i < size; i++) {
+            results[i] = firstMonth;
+            firstMonth++;
+        }
+        return results;
     }
 
     private void showLastWeekReport() {

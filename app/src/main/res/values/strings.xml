@@ -65,6 +65,7 @@
     <string name="comments">Comments</string>
     <string name="total">Total</string>
     <string name="monday">Monday</string>
+    <string name="saving">Total savings: %s</string>
 
     <!--Since we are formatting the text, we can't directly use html tags, instead we need to
          escape using &lt; instead of the opening brackets-->
@@ -97,6 +98,7 @@
 
     <string name="settings_weekly_budget_key" translatable="false">settings_weekly_budget</string>
     <string name="settings_weekly_allowance_key" translatable="false">settings_weekly_allowance_key</string>
+    <string name="january">January</string>
 
 
 </resources>
