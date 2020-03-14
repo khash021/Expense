@@ -89,8 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
         Intent intent = new Intent(getApplicationContext(), AddNewExpenseActivity.class);
         intent.setAction("tech.khash.expense.addNewExpense");
         ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "add_expense_shortcut")
-                .setShortLabel(getString(R.string.add_expense))
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_add_white))
+                .setShortLabel(getString(R.string.app_name).trim())
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut))
                 .setIntent(intent)
                 .build();
 
