@@ -9,6 +9,7 @@ public class Constants {
     public static final int REQUEST_CODE_SETTINMGS = 200;
 
     public static final String ADD_NEW_EXPENSE_EXTRA_TYPE = "add-new-expense-extra-type";
+    public static final String ADD_NEW_EXPENSE_APP_SHORTCUT = "add-new-expense-app-shortcut";
     public static final String EDIT_EXPENSE_EXTRA_EPOCH = "edit-expense-extra-epoch";
 
     public static final String THIS_WEEK_EXPENSE_KEY = "this-week-expense-key";

@@ -404,6 +404,8 @@ public class RealmUtil {
         query.sort(ExpenseEntity.EPOCH, Sort.ASCENDING);
         query.limit(1);
         RealmResults<ExpenseEntity> results = query.findAll();
+        if (CommonUtil.isEmptyList(results))
+            return -1;
         return results.get(0).getWeekOfTheYear();
     }
 
@@ -414,6 +416,8 @@ public class RealmUtil {
         query.sort(ExpenseEntity.EPOCH, Sort.DESCENDING);
         query.limit(1);
         RealmResults<ExpenseEntity> results = query.findAll();
+        if (CommonUtil.isEmptyList(results))
+            return -1;
         return results.get(0).getWeekOfTheYear();
     }
 

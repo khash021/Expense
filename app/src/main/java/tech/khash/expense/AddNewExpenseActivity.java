@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +35,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     private ActionBar actionBar;
     private boolean isEditMode = false;
     private ExpenseEntity editEntity;
+    private View expenseOverlay;
     private HashMap<String, Object> initialValuesMap;
 
     //TODO: make button and actionbar reactive to be disabled and enabled dynamically
@@ -42,11 +44,15 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expense);
+        initializeViews();
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Constants.ADD_NEW_EXPENSE_EXTRA_TYPE)) {
             int type = intent.getIntExtra(Constants.ADD_NEW_EXPENSE_EXTRA_TYPE, -1);
             setExpenseType(type);
+        } else if (intent != null && intent.hasExtra(Constants.ADD_NEW_EXPENSE_APP_SHORTCUT) &&
+                intent.getBooleanExtra(Constants.ADD_NEW_EXPENSE_APP_SHORTCUT, false)) {
+            showAppShortcutExpenseTypeOverlay();
         } else if (intent != null && intent.hasExtra(Constants.EDIT_EXPENSE_EXTRA_EPOCH)) {
             isEditMode = true;
             long epoch = intent.getLongExtra(Constants.EDIT_EXPENSE_EXTRA_EPOCH, -1);
@@ -59,8 +65,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        initializeViews();
-        setupPage(currentType);
+        //setupPage(currentType);
 
         if (isEditMode)
             setupEditMode();
@@ -68,7 +73,30 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
             saveInitialValues();
     }
 
+    private void showAppShortcutExpenseTypeOverlay() {
+        expenseOverlay.setVisibility(View.VISIBLE);
+        findViewById(R.id.overlay_food_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.FOOD));
+        findViewById(R.id.overlay_alcohol_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.ALCOHOL));
+        findViewById(R.id.overlay_weed_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.WEED));
+        findViewById(R.id.overlay_gas_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.GAS));
+        findViewById(R.id.overlay_accom_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.ACCOMMODATION));
+        findViewById(R.id.overlay_gear_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.GEAR));
+        findViewById(R.id.overlay_other_container).setOnClickListener(
+                v -> setExpenseType(ExpenseEntity.OTHER));
+    }
+
+    private void hideAppShortcutOverlay() {
+        expenseOverlay.setVisibility(View.GONE);
+    }
+
     private void initializeViews() {
+        expenseOverlay = findViewById(R.id.expense_overlay);
         imageExpenseType = findViewById(R.id.image_expense_type);
         imageExpenseType.setOnClickListener(this);
 
@@ -105,9 +133,6 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
 
         editComment.setOnKeyListener(keyListener);
         editComment.setOnFocusChangeListener(focusChangeListener);
-
-        editAmount.requestFocus();
-        showSoftKeyboard();
     }
 
     private void setupPage(int currentType) {
@@ -311,50 +336,55 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
         } else {
             RealmUtil.updateExpenseEntity(editEntity.getEpoch(), amount, currentType, comment,
                     new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    Intent returnIntent = new Intent(AddNewExpenseActivity.this, MainActivity.class);
-                    startActivity(returnIntent);
-                }
-            }, new Realm.Transaction.OnError() {
-                @Override
-                public void onError(Throwable error) {
-                    CommonUtil.showToastShort(AddNewExpenseActivity.this,
-                            getString(R.string.submission_failure));
-                }
-            });
+                        @Override
+                        public void onSuccess() {
+                            Intent returnIntent = new Intent(AddNewExpenseActivity.this, MainActivity.class);
+                            startActivity(returnIntent);
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            CommonUtil.showToastShort(AddNewExpenseActivity.this,
+                                    getString(R.string.submission_failure));
+                        }
+                    });
         }
     }
 
     private void setExpenseType(int type) {
         if (type == -1)
             return;
+        if (expenseOverlay.getVisibility() != View.GONE)
+            expenseOverlay.setVisibility(View.GONE);
         switch (type) {
             case ExpenseEntity.FOOD:
                 currentType = ExpenseEntity.FOOD;
-                return;
+                break;
             case ExpenseEntity.ALCOHOL:
                 currentType = ExpenseEntity.ALCOHOL;
-                return;
+                break;
             case ExpenseEntity.WEED:
                 currentType = ExpenseEntity.WEED;
-                return;
+                break;
             case ExpenseEntity.GAS:
                 currentType = ExpenseEntity.GAS;
-                return;
+                break;
             case ExpenseEntity.ACCOMMODATION:
                 currentType = ExpenseEntity.ACCOMMODATION;
-                return;
+                break;
             case ExpenseEntity.GEAR:
                 currentType = ExpenseEntity.GEAR;
-                return;
+                break;
             case ExpenseEntity.OTHER:
                 currentType = ExpenseEntity.OTHER;
-                return;
+                break;
             default:
                 currentType = -1;
                 return;
         }
+        setupPage(currentType);
+        editAmount.requestFocus();
+        showSoftKeyboard();
     }
 
     private int getExpenseType(int type) {

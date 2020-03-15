@@ -88,6 +88,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
 
         Intent intent = new Intent(getApplicationContext(), AddNewExpenseActivity.class);
         intent.setAction("tech.khash.expense.addNewExpense");
+        intent.putExtra(Constants.ADD_NEW_EXPENSE_APP_SHORTCUT, true);
         ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "add_expense_shortcut")
                 .setShortLabel(getString(R.string.app_name).trim())
                 .setIcon(Icon.createWithResource(this, R.drawable.ic_shortcut))
@@ -303,6 +304,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
     private void showTotalSavings() {
         int firstMonth = RealmUtil.getFirstWeekCountInt();
         int lastMonth = RealmUtil.getLastWeekCountInt();
+        if (lastMonth == -1 || firstMonth == -1)
+            return;
         int[] months = createMonthsArray(firstMonth, lastMonth);
 
         int total = 0;
@@ -310,7 +313,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,
             total = CalculateUtil.getWeeksTotal(months);
         }
 
-        if (total <=0)
+        if (total <= 0)
             return;
 
         int totalAllowance = SharedPreferencesUtil.getWeeklyAllowance(this) * months.length;
