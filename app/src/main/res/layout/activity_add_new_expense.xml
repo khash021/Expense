@@ -1,95 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/edit_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/comments_hint"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:maxLines="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_comment_title" />
+        <EditText
+            android:id="@+id/edit_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/comments_hint"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+            android:maxLines="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_comment_title" />
 
-    <EditText
-        android:id="@+id/edit_amount"
-        style="@style/text_view_general"
-        android:layout_width="50dp"
-        android:inputType="numberSigned"
-        app:layout_constraintBaseline_toBaselineOf="@id/text_amount_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/text_amount_title" />
+        <EditText
+            android:id="@+id/edit_amount"
+            style="@style/text_view_general"
+            android:layout_width="50dp"
+            android:inputType="numberSigned"
+            app:layout_constraintBaseline_toBaselineOf="@id/text_amount_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_amount_title" />
 
-    <LinearLayout
-        android:id="@+id/container_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:id="@+id/container_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/image_expense_type"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            tools:src="@drawable/weed_header"/>
+            <ImageView
+                android:id="@+id/image_expense_type"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:src="@drawable/weed_header" />
 
-    </LinearLayout>
+        </LinearLayout>
 
+        <TextView
+            android:id="@+id/text_amount_title"
+            style="@style/text_view_general"
+            android:layout_marginTop="24dp"
+            android:text="@string/amount_asterik"
+            app:layout_constraintEnd_toStartOf="@id/edit_amount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_type" />
 
-    <TextView
-        android:id="@+id/text_amount_title"
-        style="@style/text_view_general"
-        android:layout_marginTop="24dp"
-        android:text="@string/amount_asterik"
-        app:layout_constraintEnd_toStartOf="@id/edit_amount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_type" />
-
-
-    <TextView
-        android:id="@+id/text_comment_title"
-        style="@style/text_view_general"
-        android:layout_marginTop="36dp"
-        android:text="@string/comment_opt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_amount_title" />
+        <TextView
+            android:id="@+id/text_comment_title"
+            style="@style/text_view_general"
+            android:layout_marginTop="36dp"
+            android:text="@string/comment_opt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_amount_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/expense_type_overlay"
+    <include
         android:id="@+id/expense_overlay"
+        layout="@layout/expense_type_overlay"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 
 </RelativeLayout>

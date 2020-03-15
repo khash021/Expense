@@ -74,6 +74,9 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     }
 
     private void showAppShortcutExpenseTypeOverlay() {
+        View decorView = getWindow().getDecorView();
+        decorView.getSystemUiVisibility();
+
         expenseOverlay.setVisibility(View.VISIBLE);
         findViewById(R.id.overlay_food_container).setOnClickListener(
                 v -> setExpenseType(ExpenseEntity.FOOD));
@@ -89,6 +92,24 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
                 v -> setExpenseType(ExpenseEntity.GEAR));
         findViewById(R.id.overlay_other_container).setOnClickListener(
                 v -> setExpenseType(ExpenseEntity.OTHER));
+
+        showFullScreen();
+    }
+
+    private void showFullScreen() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
+    }
+
+    private void removeFullScreen() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().show();
     }
 
     private void hideAppShortcutOverlay() {
@@ -382,6 +403,7 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
                 currentType = -1;
                 return;
         }
+        removeFullScreen();
         setupPage(currentType);
         editAmount.requestFocus();
         showSoftKeyboard();
