@@ -74,9 +74,6 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
     }
 
     private void showAppShortcutExpenseTypeOverlay() {
-        View decorView = getWindow().getDecorView();
-        decorView.getSystemUiVisibility();
-
         expenseOverlay.setVisibility(View.VISIBLE);
         findViewById(R.id.overlay_food_container).setOnClickListener(
                 v -> setExpenseType(ExpenseEntity.FOOD));
@@ -110,10 +107,6 @@ public class AddNewExpenseActivity extends BaseActivity implements View.OnClickL
 
         if (getSupportActionBar() != null)
             getSupportActionBar().show();
-    }
-
-    private void hideAppShortcutOverlay() {
-        expenseOverlay.setVisibility(View.GONE);
     }
 
     private void initializeViews() {
